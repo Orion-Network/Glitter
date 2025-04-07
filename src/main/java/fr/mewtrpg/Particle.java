@@ -23,6 +23,7 @@ public class Particle extends Entity {
     private Emitter emitter;
     private Vec particlePosition;
     private Audience audience;
+    private final long creationTime = System.currentTimeMillis();
     public Particle(ParticleData particleData) {
         super(EntityType.BLOCK_DISPLAY);
         this.particleData = particleData;
@@ -56,9 +57,5 @@ public class Particle extends Entity {
     @Override
     public void tick(long time) {
         particleData.motion().apply(this);
-    }
-
-    public long getTimeAlive() {
-        return lifeTime - System.currentTimeMillis();
     }
 }

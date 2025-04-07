@@ -2,9 +2,7 @@ package fr.mewtrpg;
 
 import fr.mewtrpg.emitter.ParticleShape;
 import fr.mewtrpg.emitter.SphereShape;
-import fr.mewtrpg.particle.ItemAppearance;
-import fr.mewtrpg.particle.Motion;
-import fr.mewtrpg.particle.ParticleData;
+import fr.mewtrpg.particle.*;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Player;
@@ -12,10 +10,9 @@ import net.minestom.server.entity.metadata.display.AbstractDisplayMeta;
 import net.minestom.server.entity.metadata.display.ItemDisplayMeta;
 import net.minestom.server.item.Material;
 import net.minestom.server.timer.TaskSchedule;
+import net.objecthunter.exp4j.Expression;
+import net.objecthunter.exp4j.ExpressionBuilder;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 import java.util.ListIterator;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -34,11 +31,16 @@ public class ParticleManager implements Runnable {
         appearance.setSkyLight(15);
         appearance.setBlockLight(15);
 
-        Motion motion = new Motion(
-                Motion.MotionMode.DIRECTION,
-                1, new Vec(0, 0, 0),
-                new Motion.MotionScale(1, 0));
-        motion.setDirection(new Vec(0, 0, 0));
+
+        VelocityFormula formula = (time, particle) -> {
+            Expression expression = new ExpressionBuilder("5*time").variable("time").build().setVariable("time", time);
+            return expression.evaluate();
+        };
+
+        Motion motion = new FormulaMotion(
+                Motion.MotionMode.OUTWARD,
+                new Vec(0, 0, 0),
+                new Motion.MotionScale(0, 0), formula);
 
         ParticleData particleData = new ParticleData(1000, appearance, motion);
         Emitter emitter = new Emitter(

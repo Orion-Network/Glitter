@@ -7,6 +7,7 @@ import fr.mewtrpg.emitter.SphereShape;
 import fr.mewtrpg.particle.ItemAppearance;
 import fr.mewtrpg.particle.Motion;
 import fr.mewtrpg.particle.ParticleData;
+import fr.mewtrpg.particle.SimpleMotion;
 import net.kyori.adventure.audience.Audience;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.coordinate.Pos;
@@ -36,10 +37,10 @@ public class TestCommand extends Command {
                     ItemAppearance appearance = new ItemAppearance( 1, Material.ACACIA_BOAT, 0, ItemDisplayMeta.DisplayContext.GROUND);
                     appearance.setBillboardConstraints(AbstractDisplayMeta.BillboardConstraints.FIXED);
 
-                    Motion motion = new Motion(
+                    Motion motion = new SimpleMotion(
                             Motion.MotionMode.OUTWARD,
-                            1, new Vec(0, 0, 0),
-                            new Motion.MotionScale(0, 0));
+                             new Vec(0, 0, 0),
+                            new Motion.MotionScale(0, 0), 1);
                     motion.setDirection(new Vec(0, 1, 0));
 
                     ParticleData particleData = new ParticleData(5*1000, appearance, motion);
@@ -80,10 +81,10 @@ public class TestCommand extends Command {
                             ItemAppearance appearance = new ItemAppearance( 1, Material.ACACIA_BOAT, 0, ItemDisplayMeta.DisplayContext.GROUND);
                             appearance.setBillboardConstraints(AbstractDisplayMeta.BillboardConstraints.FIXED);
 
-                            Motion motion = new Motion(
+                            Motion motion = new SimpleMotion(
                                     Motion.MotionMode.DIRECTION,
-                                    10, new Vec(0, 0, 0),
-                                    new Motion.MotionScale(0, 0));
+                                    new Vec(0, 0, 0),
+                                    new Motion.MotionScale(0, 0), 1);
                             motion.setDirection(new Vec(0, 10, 0));
 
                             ParticleData particleData = new ParticleData(5*1000, appearance, motion);
