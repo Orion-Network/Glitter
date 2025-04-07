@@ -7,9 +7,9 @@ import org.jetbrains.annotations.NotNull;
 
 public class FormulaMotion extends Motion {
     private final FormulaVec directionFormula, velocityFormula;
-    private final MotionScale scale;
+    private final FormulaMotionScale scale;
 
-    public FormulaMotion(FormulaVec directionFormula, FormulaVec velocityFormula, MotionScale scale) {
+    public FormulaMotion(FormulaVec directionFormula, FormulaVec velocityFormula, FormulaMotionScale scale) {
         this.directionFormula = directionFormula;
         this.velocityFormula = velocityFormula;
         this.scale = scale;
@@ -24,6 +24,6 @@ public class FormulaMotion extends Motion {
 
     @Override
     public MotionScale getMotionScale(Particle particle) {
-        return scale;
+        return scale.getMotionScale(this);
     }
 }
