@@ -9,6 +9,7 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.metadata.display.AbstractDisplayMeta;
+import net.minestom.server.entity.metadata.display.ItemDisplayMeta;
 import net.minestom.server.item.Material;
 import net.minestom.server.timer.TaskSchedule;
 
@@ -28,8 +29,10 @@ public class ParticleManager implements Runnable {
     private static final AtomicBoolean running = new AtomicBoolean(true);
 
     public static void displayParticle(Player player) {
-        ItemAppearance appearance = new ItemAppearance( 1, Material.ACACIA_BOAT, 0);
+        ItemAppearance appearance = new ItemAppearance( 1, Material.BEACON, 0, ItemDisplayMeta.DisplayContext.GROUND);
         appearance.setBillboardConstraints(AbstractDisplayMeta.BillboardConstraints.FIXED);
+        appearance.setSkyLight(15);
+        appearance.setBlockLight(15);
 
         Motion motion = new Motion(
                 Motion.MotionMode.OUTWARD,
@@ -42,7 +45,7 @@ public class ParticleManager implements Runnable {
                 player.getInstance(),
                 player.getPosition().asVec(),
                 particleData, 1000,
-                new Emitter.EmitterMode(Emitter.EmitterType.LOOPING, 1000, 100),
+                new Emitter.EmitterMode(Emitter.EmitterType.LOOPING, 10000, 1000),
                 new SphereShape(5)
         );
         emitter.emit();

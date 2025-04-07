@@ -11,11 +11,13 @@ import net.minestom.server.item.Material;
 public class ItemAppearance extends Appearance {
     final Material material;
     final int customModelData;
+    final ItemDisplayMeta.DisplayContext displayContext;
 
-    public ItemAppearance(double size, Material material, int customModelData) {
+    public ItemAppearance(double size, Material material, int customModelData, ItemDisplayMeta.DisplayContext displayContext) {
         super(Mode.ITEM, size);
         this.material = material;
         this.customModelData = customModelData;
+        this.displayContext = displayContext;
     }
 
     @Override
@@ -23,6 +25,7 @@ public class ItemAppearance extends Appearance {
         particle.switchEntityType(EntityType.ITEM_DISPLAY);
         ItemDisplayMeta itemDisplayMeta = (ItemDisplayMeta) particle.getEntityMeta();
         itemDisplayMeta.setItemStack(ItemStack.of(material, 1).withCustomModelData(customModelData));
+        itemDisplayMeta.setDisplayContext(displayContext);
 
         super.apply(particle);
     }

@@ -15,6 +15,7 @@ import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.metadata.display.AbstractDisplayMeta;
+import net.minestom.server.entity.metadata.display.ItemDisplayMeta;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.server.play.EntityMetaDataPacket;
 import net.minestom.server.network.packet.server.play.EntityPositionPacket;
@@ -32,7 +33,7 @@ public class TestCommand extends Command {
                 sender.sendMessage("Test command executed!");
 
                 if (sender instanceof Player player) {
-                    ItemAppearance appearance = new ItemAppearance( 1, Material.ACACIA_BOAT, 0);
+                    ItemAppearance appearance = new ItemAppearance( 1, Material.ACACIA_BOAT, 0, ItemDisplayMeta.DisplayContext.GROUND);
                     appearance.setBillboardConstraints(AbstractDisplayMeta.BillboardConstraints.FIXED);
 
                     Motion motion = new Motion(
@@ -76,7 +77,7 @@ public class TestCommand extends Command {
                 {
                     setDefaultExecutor((sender, context) -> {
                         if ((sender instanceof Player player)) {
-                            ItemAppearance appearance = new ItemAppearance( 1, Material.ACACIA_BOAT, 0);
+                            ItemAppearance appearance = new ItemAppearance( 1, Material.ACACIA_BOAT, 0, ItemDisplayMeta.DisplayContext.GROUND);
                             appearance.setBillboardConstraints(AbstractDisplayMeta.BillboardConstraints.FIXED);
 
                             Motion motion = new Motion(

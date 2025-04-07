@@ -29,7 +29,8 @@ public class Demo {
         // Create the instance
         InstanceManager instanceManager = MinecraftServer.getInstanceManager();
         InstanceContainer instanceContainer = instanceManager.createInstanceContainer();
-
+        instanceContainer.setTime(22000);
+        instanceContainer.setTimeRate(0);
         instanceContainer.setChunkSupplier(LightingChunk::new);
         // Set the ChunkGenerator
         instanceContainer.setGenerator(unit -> unit.modifier().fillHeight(0, 40, Block.GRASS_BLOCK));

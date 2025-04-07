@@ -17,7 +17,7 @@ public class Appearance {
     private AbstractDisplayMeta.BillboardConstraints billboardConstraints = AbstractDisplayMeta.BillboardConstraints.CENTER;
     private boolean hasPhysics = false;
     private boolean emissive = false;
-    private int skylight = 0, blockLight = 0;
+    private int skyLight = 0, blockLight = 0;
     private float view_range = 25;
 
     public Appearance(Mode mode, double size) {
@@ -34,7 +34,10 @@ public class Appearance {
         displayMeta.setTransformationInterpolationDuration(50);
         displayMeta.setScale(new Vec(size, size, size));
         displayMeta.setBillboardRenderConstraints(billboardConstraints);
-        //TODO see for emissive and skylight/blocklight
+        if(emissive)
+            displayMeta.setBrightnessOverride((0xF) << 4 | (0xF) << 20);
+        displayMeta.setBrightnessOverride((blockLight & 0xF) << 4 | (skyLight & 0xF) << 20);
+
         displayMeta.setViewRange(view_range);
     }
 
