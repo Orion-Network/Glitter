@@ -1,25 +1,22 @@
 package fr.mewtrpg;
 
-import fr.mewtrpg.emitter.ParticleShape;
+import fr.mewtrpg.emitter.EmitterMode;
+import fr.mewtrpg.emitter.EmitterType;
+import fr.mewtrpg.emitter.shape.ParticleShape;
 import fr.mewtrpg.particle.ParticleData;
+import fr.mewtrpg.utils.VariablesHolder;
 import lombok.Getter;
-import net.kyori.adventure.audience.Audience;
-import net.kyori.adventure.audience.Audiences;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.Tickable;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.network.packet.server.play.DestroyEntitiesPacket;
-import net.minestom.server.timer.Scheduler;
-import net.minestom.server.timer.TaskSchedule;
 import net.minestom.server.utils.PacketUtils;
 
 import java.util.*;
 import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 @Getter
-public final class Emitter implements Tickable {
+public final class Emitter implements Tickable, VariablesHolder {
 
     private final ConcurrentLinkedQueue<Particle> particles = new ConcurrentLinkedQueue<>();
     private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
@@ -31,6 +28,8 @@ public final class Emitter implements Tickable {
     private final EmitterMode mode;
     private final ParticleShape shape;
 
+    private final HashMap<String, Double> variables = new HashMap<>();
+    private final long creationTime = System.currentTimeMillis();
     private long lastExecution = System.currentTimeMillis();
 
     public Emitter(Instance instance, Vec position, ParticleData particleData, int amount, EmitterMode mode, ParticleShape shape) {
@@ -40,13 +39,15 @@ public final class Emitter implements Tickable {
         this.amount = amount;
         this.mode = mode;
         this.shape = shape;
+
     }
 
 
     public void emit() {
+        variables.put("time", (System.currentTimeMillis() - creationTime) / 1000.0);
         for (int i = 0; i < amount; i++) {
             Particle particle = new Particle(particleData);
-            particle.play(Objects.requireNonNull(instance.getChunkAt(position)).getViewersAsAudience(), this, shape.randomPositionInShape().add(position));
+            particle.play(Objects.requireNonNull(instance.getChunkAt(position)).getViewersAsAudience(), this, shape.randomPositionInShape(this).add(position));
             particles.add(particle);
         }
     }
@@ -60,7 +61,7 @@ public final class Emitter implements Tickable {
 
     @Override
     public void tick(long l) {
-        if (lastExecution + mode.delay < System.currentTimeMillis()) {
+        if (lastExecution + mode.getDelay() < System.currentTimeMillis()) {
             emit();
             lastExecution = System.currentTimeMillis();
         }
@@ -76,26 +77,7 @@ public final class Emitter implements Tickable {
     }
 
     public boolean isDead() {
-        return (mode.type == EmitterType.LOOPING && System.currentTimeMillis() > mode.lifeTime);
+        return (mode.getType() == EmitterType.LOOPING && System.currentTimeMillis() > mode.getLifeTime());
     }
 
-    public static class EmitterMode {
-        final EmitterType type;
-        long lifeTime = 0;
-        long delay = 0;
-
-        public EmitterMode(EmitterType type) {
-            this.type = type;
-        }
-
-        public EmitterMode(EmitterType type, long lifeTime, long delay) {
-            this.type = type;
-            this.lifeTime = System.currentTimeMillis() + lifeTime;
-            this.delay = delay;
-        }
-    }
-
-    public enum EmitterType {
-        ONCE, LOOPING
-    }
 }

@@ -1,5 +1,6 @@
-package fr.mewtrpg.emitter;
+package fr.mewtrpg.emitter.shape;
 
+import fr.mewtrpg.Emitter;
 import net.minestom.server.coordinate.Vec;
 
 public class SphereShape extends ParticleShape {
@@ -10,7 +11,7 @@ public class SphereShape extends ParticleShape {
     }
 
     @Override
-    public Vec randomPositionInShape() {
+    public Vec randomPositionInShape(Emitter emitter) {
         if(isSurface()) {
             double theta = Math.random() * 2 * Math.PI;
             double phi = Math.acos(1 - 2 * Math.random());
@@ -18,7 +19,7 @@ public class SphereShape extends ParticleShape {
             double y = radius * Math.sin(phi) * Math.sin(theta);
             double z = radius * Math.cos(phi);
 
-            return new Vec(x, y, z).add(getOffset());
+            return new Vec(x, y, z).add(getOffset(emitter));
         }
 
         double x = Math.random() * 2 * radius - radius;
@@ -30,6 +31,6 @@ public class SphereShape extends ParticleShape {
             y = (y / distance) * radius;
             z = (z / distance) * radius;
         }
-        return new Vec(x, y, z).add(getOffset());
+        return new Vec(x, y, z).add(getOffset(emitter));
     }
 }

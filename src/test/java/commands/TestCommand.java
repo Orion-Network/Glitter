@@ -1,9 +1,9 @@
 package commands;
 
-import fr.mewtrpg.Emitter;
-import fr.mewtrpg.Particle;
-import fr.mewtrpg.ParticleManager;
-import fr.mewtrpg.emitter.SphereShape;
+import fr.mewtrpg.*;
+import fr.mewtrpg.emitter.EmitterMode;
+import fr.mewtrpg.emitter.EmitterType;
+import fr.mewtrpg.emitter.shape.SphereShape;
 import fr.mewtrpg.particle.appearance.ItemAppearance;
 import fr.mewtrpg.particle.motion.Motion;
 import fr.mewtrpg.particle.ParticleData;
@@ -90,7 +90,7 @@ public class TestCommand extends Command {
                                     player.getInstance(),
                                     player.getPosition().asVec(),
                                     particleData, 100,
-                                    new Emitter.EmitterMode(Emitter.EmitterType.ONCE, 1000, 0),
+                                    new EmitterMode(EmitterType.ONCE, 1000, 0),
                                     new SphereShape(10)
                             );
 

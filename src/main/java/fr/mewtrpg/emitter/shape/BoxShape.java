@@ -1,5 +1,6 @@
-package fr.mewtrpg.emitter;
+package fr.mewtrpg.emitter.shape;
 
+import fr.mewtrpg.Emitter;
 import net.minestom.server.coordinate.Vec;
 
 public class BoxShape extends ParticleShape {
@@ -10,11 +11,11 @@ public class BoxShape extends ParticleShape {
     }
 
     @Override
-    public Vec randomPositionInShape() {
+    public Vec randomPositionInShape(Emitter emitter) {
         double x = Math.random() * size.x() - size.x() / 2;
         double y = Math.random() * size.y() - size.y() / 2;
         double z = Math.random() * size.z() - size.z() / 2;
 
-        return new Vec(x, y, z).add(getOffset());
+        return new Vec(x, y, z).add(getOffset(emitter));
     }
 }
