@@ -29,23 +29,23 @@ public class ParticleManager implements Runnable {
     private static final AtomicBoolean running = new AtomicBoolean(true);
 
     public static void displayParticle(Player player) {
-        ItemAppearance appearance = new ItemAppearance( 1, Material.BEACON, 0, ItemDisplayMeta.DisplayContext.GROUND);
+        ItemAppearance appearance = new ItemAppearance( 10, Material.BEACON, 0, ItemDisplayMeta.DisplayContext.GROUND);
         appearance.setBillboardConstraints(AbstractDisplayMeta.BillboardConstraints.FIXED);
         appearance.setSkyLight(15);
         appearance.setBlockLight(15);
 
         Motion motion = new Motion(
-                Motion.MotionMode.OUTWARD,
+                Motion.MotionMode.DIRECTION,
                 1, new Vec(0, 0, 0),
-                new Motion.MotionScale(0, 0));
+                new Motion.MotionScale(1, 1000));
         motion.setDirection(new Vec(0, 1, 0));
 
-        ParticleData particleData = new ParticleData(2*1000, appearance, motion);
+        ParticleData particleData = new ParticleData(1000, appearance, motion);
         Emitter emitter = new Emitter(
                 player.getInstance(),
                 player.getPosition().asVec(),
                 particleData, 1000,
-                new Emitter.EmitterMode(Emitter.EmitterType.LOOPING, 10000, 1000),
+                new Emitter.EmitterMode(Emitter.EmitterType.LOOPING, 1000, 1000),
                 new SphereShape(5)
         );
         emitter.emit();

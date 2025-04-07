@@ -9,6 +9,7 @@ import net.minestom.server.network.packet.server.play.EntityMetaDataPacket;
 import net.minestom.server.network.packet.server.play.EntityPositionPacket;
 import net.minestom.server.network.packet.server.play.EntityVelocityPacket;
 import net.minestom.server.utils.PacketUtils;
+import org.jetbrains.annotations.NotNull;
 
 @Getter
 public class Motion {
@@ -27,16 +28,7 @@ public class Motion {
     }
 
     public void apply(Particle particle) {
-        Vec direction;
-        switch (mode) {
-            case INWARD -> direction = particle.getEmitter().getPosition().sub(particle.getParticlePosition()).normalize();
-            case OUTWARD -> direction = particle.getParticlePosition().sub(particle.getEmitter().getPosition()).normalize();
-            case DIRECTION -> direction = this.direction.normalize();
-            default -> throw new IllegalStateException("Unexpected value: " + mode);
-        }
-
-        Vec velocity = direction.mul(speed);
-        //TODO Acceleration : velocity = velocity.mul(acceleration.mul(aliveTime/1000));
+        Vec velocity = getVec(particle);
         particle.setVelocity(velocity);
         PacketUtils.sendPacket(particle.getAudience(),
                 EntityPositionPacket.getPacket(particle.getEntityId(), particle.getPosition().add(velocity), particle.getPosition(), false));
@@ -49,6 +41,20 @@ public class Motion {
             PacketUtils.sendPacket(particle.getAudience(), new EntityMetaDataPacket(particle.getEntityId(), metadataPacket.entries()));
         }
 
+    }
+
+    private @NotNull Vec getVec(Particle particle) {
+        Vec direction;
+        switch (mode) {
+            case INWARD -> direction = particle.getEmitter().getPosition().sub(particle.getParticlePosition()).normalize();
+            case OUTWARD -> direction = particle.getParticlePosition().sub(particle.getEmitter().getPosition()).normalize();
+            case DIRECTION -> direction = this.direction.normalize();
+            default -> throw new IllegalStateException("Unexpected value: " + mode);
+        }
+
+        Vec velocity = direction.mul(speed);
+        //velocity = velocity.add(acceleration);
+        return velocity;
     }
 
     public record MotionScale(double size, double duration, double delay) {
