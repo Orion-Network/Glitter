@@ -1,23 +1,26 @@
-package fr.mewtrpg.particle;
+package fr.mewtrpg.particle.motion;
 
 import fr.mewtrpg.Particle;
+import lombok.Getter;
 import net.minestom.server.coordinate.Vec;
-import net.minestom.server.entity.metadata.display.AbstractDisplayMeta;
-import net.minestom.server.network.packet.server.play.EntityMetaDataPacket;
-import net.minestom.server.network.packet.server.play.EntityPositionPacket;
-import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 
+@Getter
 public class SimpleMotion extends Motion {
+    private final MotionMode mode;
     private final double speed;
+    private final Vec acceleration;
+    private final MotionScale scale;
 
-    public SimpleMotion(MotionMode mode, Vec acceleration, MotionScale scale, double speed) {
-        super(mode, acceleration, scale);
+    public SimpleMotion(MotionMode mode, double speed, Vec acceleration, MotionScale scale) {
+        this.mode = mode;
         this.speed = speed;
+        this.acceleration = acceleration;
+        this.scale = scale;
     }
 
     @NotNull
-    public Vec getVec(Particle particle) {
+    public Vec getVelocityVec(Particle particle) {
         Vec direction;
         switch (getMode()) {
             case INWARD -> direction = particle.getEmitter().getPosition().sub(particle.getParticlePosition()).normalize();
@@ -29,5 +32,15 @@ public class SimpleMotion extends Motion {
         Vec velocity = direction.mul(speed);
         //velocity = velocity.add(acceleration);
         return velocity;
+    }
+
+    @Override
+    public MotionScale getMotionScale(Particle particle) {
+        return scale;
+    }
+
+
+    public enum MotionMode {
+        INWARD, OUTWARD, DIRECTION
     }
 }

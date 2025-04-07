@@ -1,6 +1,7 @@
 package fr.mewtrpg.particle;
 
-import net.minestom.server.coordinate.Vec;
+import fr.mewtrpg.particle.appearance.Appearance;
+import fr.mewtrpg.particle.motion.Motion;
 
-public record ParticleData(long lifeTime,Appearance appearance, Motion motion) {
+public record ParticleData(long lifeTime, Appearance appearance, Motion motion) {
 }

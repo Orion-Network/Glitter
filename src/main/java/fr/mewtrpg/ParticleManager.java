@@ -1,21 +1,20 @@
 package fr.mewtrpg;
 
-import fr.mewtrpg.emitter.ParticleShape;
 import fr.mewtrpg.emitter.SphereShape;
 import fr.mewtrpg.particle.*;
-import net.minestom.server.MinecraftServer;
+import fr.mewtrpg.particle.appearance.ItemAppearance;
+import fr.mewtrpg.particle.motion.FormulaMotion;
+import fr.mewtrpg.particle.motion.Motion;
+import fr.mewtrpg.particle.motion.MotionScale;
+import fr.mewtrpg.utils.FormulaVec;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.metadata.display.AbstractDisplayMeta;
 import net.minestom.server.entity.metadata.display.ItemDisplayMeta;
 import net.minestom.server.item.Material;
-import net.minestom.server.timer.TaskSchedule;
-import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
 
-import java.util.ListIterator;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -31,23 +30,35 @@ public class ParticleManager implements Runnable {
         appearance.setSkyLight(15);
         appearance.setBlockLight(15);
 
+        // Make direction going up in spiral
+        FormulaVec directionFormula = new FormulaVec(
+                new ExpressionBuilder("sin(time)*2")
+                        .variable("time")
+                        .build(),
+                new ExpressionBuilder("cos(time)*2")
+                        .variable("time")
+                        .build(),
+                new ExpressionBuilder("0")
+                        .build()
+        );
 
-        VelocityFormula formula = (time, particle) -> {
-            Expression expression = new ExpressionBuilder("5*time").variable("time").build().setVariable("time", time);
-            return expression.evaluate();
-        };
+        FormulaVec velocityFormula = new FormulaVec(
+                new ExpressionBuilder("1")
+                        .build(),
+                new ExpressionBuilder("1")
+                        .build(),
+                new ExpressionBuilder("1")
+                        .build()
+        );
 
-        Motion motion = new FormulaMotion(
-                Motion.MotionMode.OUTWARD,
-                new Vec(0, 0, 0),
-                new Motion.MotionScale(0, 0), formula);
+        Motion motion = new FormulaMotion(directionFormula, velocityFormula, new MotionScale(0, 0));
 
-        ParticleData particleData = new ParticleData(1000, appearance, motion);
+        ParticleData particleData = new ParticleData(10000, appearance, motion);
         Emitter emitter = new Emitter(
                 player.getInstance(),
                 player.getPosition().asVec(),
                 particleData, 1000,
-                new Emitter.EmitterMode(Emitter.EmitterType.LOOPING, 1000, 1000),
+                new Emitter.EmitterMode(Emitter.EmitterType.LOOPING, 10000, 10000),
                 new SphereShape(5)
         );
         emitter.emit();

@@ -4,25 +4,21 @@ import fr.mewtrpg.Emitter;
 import fr.mewtrpg.Particle;
 import fr.mewtrpg.ParticleManager;
 import fr.mewtrpg.emitter.SphereShape;
-import fr.mewtrpg.particle.ItemAppearance;
-import fr.mewtrpg.particle.Motion;
+import fr.mewtrpg.particle.appearance.ItemAppearance;
+import fr.mewtrpg.particle.motion.Motion;
 import fr.mewtrpg.particle.ParticleData;
-import fr.mewtrpg.particle.SimpleMotion;
-import net.kyori.adventure.audience.Audience;
+import fr.mewtrpg.particle.motion.MotionScale;
+import fr.mewtrpg.particle.motion.SimpleMotion;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
-import net.minestom.server.entity.EntityType;
-import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.metadata.display.AbstractDisplayMeta;
 import net.minestom.server.entity.metadata.display.ItemDisplayMeta;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.server.play.EntityMetaDataPacket;
 import net.minestom.server.network.packet.server.play.EntityPositionPacket;
-import net.minestom.server.network.packet.server.play.EntityVelocityPacket;
 import net.minestom.server.network.packet.server.play.SpawnEntityPacket;
-import net.minestom.server.utils.PacketUtils;
 
 import java.util.UUID;
 
@@ -38,9 +34,9 @@ public class TestCommand extends Command {
                     appearance.setBillboardConstraints(AbstractDisplayMeta.BillboardConstraints.FIXED);
 
                     Motion motion = new SimpleMotion(
-                            Motion.MotionMode.OUTWARD,
-                             new Vec(0, 0, 0),
-                            new Motion.MotionScale(0, 0), 1);
+                            SimpleMotion.MotionMode.OUTWARD,
+                            1, new Vec(0, 0, 0),
+                            new MotionScale(0, 0));
                     motion.setDirection(new Vec(0, 1, 0));
 
                     ParticleData particleData = new ParticleData(5*1000, appearance, motion);
@@ -82,9 +78,9 @@ public class TestCommand extends Command {
                             appearance.setBillboardConstraints(AbstractDisplayMeta.BillboardConstraints.FIXED);
 
                             Motion motion = new SimpleMotion(
-                                    Motion.MotionMode.DIRECTION,
-                                    new Vec(0, 0, 0),
-                                    new Motion.MotionScale(0, 0), 1);
+                                    SimpleMotion.MotionMode.DIRECTION,
+                                    1, new Vec(0, 0, 0),
+                                    new MotionScale(0, 0));
                             motion.setDirection(new Vec(0, 10, 0));
 
                             ParticleData particleData = new ParticleData(5*1000, appearance, motion);

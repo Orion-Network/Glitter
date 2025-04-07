@@ -1,10 +1,8 @@
-package fr.mewtrpg.particle;
+package fr.mewtrpg.particle.appearance;
 
 import fr.mewtrpg.Particle;
 import net.minestom.server.entity.EntityType;
-import net.minestom.server.entity.metadata.display.BlockDisplayMeta;
 import net.minestom.server.entity.metadata.display.ItemDisplayMeta;
-import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 
