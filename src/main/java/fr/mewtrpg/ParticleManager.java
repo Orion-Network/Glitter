@@ -16,10 +16,17 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ParticleManager implements Runnable {
-    static final List<Emitter> emitters = new CopyOnWriteArrayList<>();
+    private static final ConcurrentLinkedQueue<Emitter> emitters = new ConcurrentLinkedQueue<>();
+    private static final ExecutorService executor = Executors.newSingleThreadExecutor();
+    private static final AtomicBoolean running = new AtomicBoolean(true);
+
     public static void displayParticle(Player player) {
         ItemAppearance appearance = new ItemAppearance( 1, Material.ACACIA_BOAT, 0);
         appearance.setBillboardConstraints(AbstractDisplayMeta.BillboardConstraints.FIXED);
@@ -34,8 +41,8 @@ public class ParticleManager implements Runnable {
         Emitter emitter = new Emitter(
                 player.getInstance(),
                 player.getPosition().asVec(),
-                particleData, 100,
-                new Emitter.EmitterMode(Emitter.EmitterType.LOOPING, 10*1000, 100),
+                particleData, 1000,
+                new Emitter.EmitterMode(Emitter.EmitterType.LOOPING, 1000, 100),
                 new SphereShape(5)
         );
         emitter.emit();
@@ -43,10 +50,33 @@ public class ParticleManager implements Runnable {
     }
 
     public static void start() {
-        ParticleManager particleManager = new ParticleManager();
-        MinecraftServer.getSchedulerManager().buildTask(particleManager)
-                .repeat(TaskSchedule.tick(1))
-                .schedule();
+        // Démarrer le thread de traitement
+        executor.submit(() -> {
+            while (running.get()) {
+                try {
+                    // Traitement par lots pour éviter de bloquer trop longtemps
+                    for (Emitter emitter : emitters) {
+                        if (emitter.isDead()) {
+                            emitter.destroy();
+                            emitters.remove(emitter);
+                            continue;
+                        }
+                        emitter.tick(0);
+                    }
+                    Thread.sleep(50); // 20 ticks par seconde (~50ms)
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    break;
+                }
+            }
+        });
+    }
+
+    public static void stop() {
+        running.set(false);
+        executor.shutdownNow();
+        emitters.forEach(Emitter::destroy);
+        emitters.clear();
     }
 
     @Override

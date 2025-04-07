@@ -15,13 +15,14 @@ import net.minestom.server.timer.TaskSchedule;
 import net.minestom.server.utils.PacketUtils;
 
 import java.util.*;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @Getter
 public final class Emitter implements Tickable {
 
-    private final List<Particle> particles = new CopyOnWriteArrayList<>();
+    private final ConcurrentLinkedQueue<Particle> particles = new ConcurrentLinkedQueue<>();
+    private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 
     private final Instance instance;
     private final Vec position;
@@ -51,26 +52,27 @@ public final class Emitter implements Tickable {
     }
 
     public void destroy() {
-        for (Particle particle : particles) {
-            PacketUtils.sendPacket(particle.getAudience(), new DestroyEntitiesPacket(particle.getEntityId()));
-        }
+        scheduler.shutdownNow();
+        particles.forEach(particle ->
+                PacketUtils.sendPacket(particle.getAudience(), new DestroyEntitiesPacket(particle.getEntityId())));
         particles.clear();
     }
 
     @Override
     public void tick(long l) {
-        if(lastExecution + mode.delay < System.currentTimeMillis()) {
+        if (lastExecution + mode.delay < System.currentTimeMillis()) {
             emit();
             lastExecution = System.currentTimeMillis();
         }
-        for (Particle particle : particles) {
+
+        particles.removeIf(particle -> {
             if (System.currentTimeMillis() > particle.getLifeTime()) {
                 PacketUtils.sendPacket(particle.getAudience(), new DestroyEntitiesPacket(particle.getEntityId()));
-                particles.remove(particle); // Safe avec CopyOnWriteArrayList
-            } else {
-                particle.tick(l);
+                return true;
             }
-        }
+            particle.tick(l);
+            return false;
+        });
     }
 
     public boolean isDead() {
