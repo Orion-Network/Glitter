@@ -49,7 +49,7 @@ public class TestCommand extends Command {
 
                     Pos position = player.getPosition();
                     SpawnEntityPacket fakePacket = new SpawnEntityPacket(START_ENTITY_ID, UUID.randomUUID(), packet.type(),
-                            position, packet.headRot(), packet.data(), (short) 0, (short) 10, (short) 0);
+                            position, packet.headRot(), packet.data(), (short) 0, (short) 0, (short) 0);
 
                     EntityMetaDataPacket fakeMetadataPacket = new EntityMetaDataPacket(START_ENTITY_ID, metadataPacket.entries());
 

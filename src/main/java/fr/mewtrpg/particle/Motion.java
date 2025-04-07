@@ -6,6 +6,7 @@ import lombok.Setter;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.metadata.display.AbstractDisplayMeta;
 import net.minestom.server.network.packet.server.play.EntityMetaDataPacket;
+import net.minestom.server.network.packet.server.play.EntityPositionPacket;
 import net.minestom.server.network.packet.server.play.EntityVelocityPacket;
 import net.minestom.server.utils.PacketUtils;
 
@@ -28,8 +29,8 @@ public class Motion {
     public void apply(Particle particle) {
         Vec direction;
         switch (mode) {
-            case INWARD -> direction = particle.getEmitter().position().sub(particle.getParticlePosition()).normalize();
-            case OUTWARD -> direction = particle.getParticlePosition().sub(particle.getEmitter().position()).normalize();
+            case INWARD -> direction = particle.getEmitter().getPosition().sub(particle.getParticlePosition()).normalize();
+            case OUTWARD -> direction = particle.getParticlePosition().sub(particle.getEmitter().getPosition()).normalize();
             case DIRECTION -> direction = this.direction.normalize();
             default -> throw new IllegalStateException("Unexpected value: " + mode);
         }
@@ -37,8 +38,8 @@ public class Motion {
         Vec velocity = direction.mul(speed);
         //TODO Acceleration : velocity = velocity.mul(acceleration.mul(aliveTime/1000));
         particle.setVelocity(velocity);
-        PacketUtils.sendPacket(particle.getAudience(), new EntityVelocityPacket(particle.getEntityId(), velocity));
-        System.out.println("Velocity: " + velocity);
+        PacketUtils.sendPacket(particle.getAudience(),
+                EntityPositionPacket.getPacket(particle.getEntityId(), particle.getPosition().add(velocity), particle.getPosition(), false));
 
         AbstractDisplayMeta displayMeta = (AbstractDisplayMeta) particle.getEntityMeta();
         if (System.currentTimeMillis() > particle.getLifeTime() - scale.duration) {

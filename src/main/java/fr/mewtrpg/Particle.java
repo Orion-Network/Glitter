@@ -47,9 +47,6 @@ public class Particle extends Entity {
 
         PacketUtils.sendPacket(audience, fakePacket);
         PacketUtils.sendPacket(audience, fakeMetadataPacket);
-
-        EntityVelocityPacket velocityPacket = new EntityVelocityPacket(START_ENTITY_ID, new Pos(0, 10, 0));
-        PacketUtils.sendPacket(audience, velocityPacket);
     }
 
     public void setPhysics(boolean hasPhysics) {
@@ -58,7 +55,6 @@ public class Particle extends Entity {
 
     @Override
     public void tick(long time) {
-        System.out.println("Ticking particle " + this.getEntityId());
         particleData.motion().apply(this);
     }
 }
