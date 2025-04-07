@@ -29,7 +29,7 @@ public class ParticleManager implements Runnable {
     private static final AtomicBoolean running = new AtomicBoolean(true);
 
     public static void displayParticle(Player player) {
-        ItemAppearance appearance = new ItemAppearance( 10, Material.BEACON, 0, ItemDisplayMeta.DisplayContext.GROUND);
+        ItemAppearance appearance = new ItemAppearance( 1, Material.BEACON, 0, ItemDisplayMeta.DisplayContext.GROUND);
         appearance.setBillboardConstraints(AbstractDisplayMeta.BillboardConstraints.FIXED);
         appearance.setSkyLight(15);
         appearance.setBlockLight(15);
@@ -37,8 +37,8 @@ public class ParticleManager implements Runnable {
         Motion motion = new Motion(
                 Motion.MotionMode.DIRECTION,
                 1, new Vec(0, 0, 0),
-                new Motion.MotionScale(1, 1000));
-        motion.setDirection(new Vec(0, 1, 0));
+                new Motion.MotionScale(1, 0));
+        motion.setDirection(new Vec(0, 0, 0));
 
         ParticleData particleData = new ParticleData(1000, appearance, motion);
         Emitter emitter = new Emitter(
