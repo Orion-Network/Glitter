@@ -57,4 +57,8 @@ public class Particle extends Entity {
     public void tick(long time) {
         particleData.motion().apply(this);
     }
+
+    public long getTimeAlive() {
+        return lifeTime - System.currentTimeMillis();
+    }
 }
