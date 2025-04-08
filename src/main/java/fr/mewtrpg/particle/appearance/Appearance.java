@@ -14,6 +14,8 @@ public abstract class Appearance {
     private boolean emissive = false;
     private int skyLight = 0, blockLight = 0;
     private float viewRange = 25;
+    private boolean hasGlow = false;
+    private int glowColor = 0xFFFFFF;
 
     public Appearance(double size) {
         this.size = size;
@@ -33,5 +35,10 @@ public abstract class Appearance {
         displayMeta.setBrightnessOverride((blockLight & 0xF) << 4 | (skyLight & 0xF) << 20);
 
         displayMeta.setViewRange(viewRange);
+
+        if(hasGlow) {
+            displayMeta.setHasGlowingEffect(true);
+            displayMeta.setGlowColorOverride(glowColor);
+        }
     }
 }

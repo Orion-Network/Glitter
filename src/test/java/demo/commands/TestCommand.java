@@ -62,10 +62,10 @@ public class TestCommand extends Command {
                 {
                     setDefaultExecutor((sender, _) -> {
                         if ((sender instanceof Player player)) {
-                            ItemAppearance appearance = new ItemAppearance( 1, Material.BEACON, 0, ItemDisplayMeta.DisplayContext.GROUND);
+                            ItemAppearance appearance = new ItemAppearance( 1, Material.NETHER_BRICKS, 0, ItemDisplayMeta.DisplayContext.GROUND);
                             appearance.setBillboardConstraints(AbstractDisplayMeta.BillboardConstraints.FIXED);
                             appearance.setSkyLight(15);
-                            appearance.setBlockLight(15);
+                            appearance.setBlockLight(0);
 
                             // Make direction going up in spiral
                             FormulaVec directionFormula = new FormulaVec(

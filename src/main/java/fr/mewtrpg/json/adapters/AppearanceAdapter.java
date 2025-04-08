@@ -34,6 +34,8 @@ public class AppearanceAdapter implements JsonSerializer<Appearance>, JsonDeseri
         appearance.setSkyLight(jsonObject.get("skyLight").getAsInt());
         appearance.setBlockLight(jsonObject.get("blockLight").getAsInt());
         appearance.setViewRange(jsonObject.get("viewRange").getAsFloat());
+        appearance.setHasGlow(jsonObject.get("hasGlow").getAsBoolean());
+        appearance.setGlowColor(jsonObject.get("glowColor").getAsInt());
 
         return appearance;
     }
@@ -49,6 +51,8 @@ public class AppearanceAdapter implements JsonSerializer<Appearance>, JsonDeseri
         jsonObject.addProperty("skyLight", src.getSkyLight());
         jsonObject.addProperty("blockLight", src.getBlockLight());
         jsonObject.addProperty("viewRange", src.getViewRange());
+        jsonObject.addProperty("hasGlow", src.isHasGlow());
+        jsonObject.addProperty("glowColor", src.getGlowColor());
         switch (src.getClass().getSimpleName()) {
             case "ItemAppearance" -> {
                 ItemAppearance itemAppearance = (ItemAppearance) src;
