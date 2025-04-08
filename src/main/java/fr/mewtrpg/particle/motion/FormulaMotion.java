@@ -17,13 +17,13 @@ public class FormulaMotion extends Motion {
 
     @NotNull
     public Vec getVelocityVec(Particle particle) {
-        Vec direction = directionFormula.getVec(this);
-        Vec speed = velocityFormula.getVec(this);
+        Vec direction = directionFormula.getVec(particle);
+        Vec speed = velocityFormula.getVec(particle);
         return direction.mul(speed);
     }
 
     @Override
     public MotionScale getMotionScale(Particle particle) {
-        return scale.getMotionScale(this);
+        return scale.getMotionScale(particle);
     }
 }

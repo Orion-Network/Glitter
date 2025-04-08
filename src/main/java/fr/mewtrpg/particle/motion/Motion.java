@@ -14,14 +14,13 @@ import java.util.HashMap;
 
 
 @Getter
-public abstract class Motion implements VariablesHolder {
+public abstract class Motion{
     @Setter
     private Vec direction = new Vec(0, 0, 0);
 
     private final HashMap<String, Double> variables = new HashMap<>();
 
     public void apply(Particle particle) {
-        variables.put("time", (System.currentTimeMillis() - particle.getCreationTime()) / 1000.0);
         Vec velocity = getVelocityVec(particle);
         PacketUtils.sendPacket(particle.getAudience(),
                 EntityPositionPacket.getPacket(particle.getEntityId(), particle.getPosition().add(velocity), particle.getPosition(), false));
@@ -38,9 +37,4 @@ public abstract class Motion implements VariablesHolder {
 
     public abstract Vec getVelocityVec(Particle particle);
     public abstract MotionScale getMotionScale(Particle particle);
-
-    @Override
-    public HashMap<String, Double> getVariables() {
-        return variables;
-    }
 }

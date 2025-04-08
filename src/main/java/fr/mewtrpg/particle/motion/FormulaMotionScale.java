@@ -2,6 +2,7 @@ package fr.mewtrpg.particle.motion;
 
 import fr.mewtrpg.Particle;
 import fr.mewtrpg.utils.FormulaVariable;
+import fr.mewtrpg.utils.VariablesHolder;
 
 public class FormulaMotionScale {
     private final FormulaVariable sizeFormula;
@@ -18,25 +19,25 @@ public class FormulaMotionScale {
         this(sizeFormula, durationFormula, null);
     }
 
-    public double getSize(Motion motion) {
-        return sizeFormula.getValue(motion);
+    public double getSize(VariablesHolder variablesHolder) {
+        return sizeFormula.getValue(variablesHolder);
     }
 
-    public double getDuration(Motion motion) {
-        return durationFormula.getValue(motion);
+    public double getDuration(VariablesHolder variablesHolder) {
+        return durationFormula.getValue(variablesHolder);
     }
 
-    public double getDelay(Motion motion) {
+    public double getDelay(VariablesHolder variablesHolder) {
         if (delayFormula == null) {
             return 0;
         }
-        return delayFormula.getValue(motion);
+        return delayFormula.getValue(variablesHolder);
     }
 
-    public MotionScale getMotionScale(Motion motion) {
-        double size = getSize(motion);
-        double duration = getDuration(motion);
-        double delay = getDelay(motion);
+    public MotionScale getMotionScale(VariablesHolder variablesHolder) {
+        double size = getSize(variablesHolder);
+        double duration = getDuration(variablesHolder);
+        double delay = getDelay(variablesHolder);
         return new MotionScale(size, duration, delay);
     }
 }

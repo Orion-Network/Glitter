@@ -1,6 +1,7 @@
 package fr.mewtrpg;
 
 import fr.mewtrpg.particle.ParticleData;
+import fr.mewtrpg.utils.VariablesHolder;
 import lombok.Getter;
 import net.kyori.adventure.audience.Audience;
 import net.minestom.server.coordinate.Pos;
@@ -14,35 +15,45 @@ import net.minestom.server.network.packet.server.play.EntityVelocityPacket;
 import net.minestom.server.network.packet.server.play.SpawnEntityPacket;
 import net.minestom.server.utils.PacketUtils;
 
+import java.util.HashMap;
 import java.util.UUID;
 
 @Getter
-public class Particle extends Entity {
+public class Particle extends Entity implements VariablesHolder {
     final ParticleData particleData;
     final long lifeTime;
     private Emitter emitter;
     private Vec particlePosition;
     private Audience audience;
+
+    private final HashMap<String, Double> variables = new HashMap<>();
     private final long creationTime = System.currentTimeMillis();
-    public Particle(ParticleData particleData) {
+
+
+    public Particle(ParticleData particleData, Vec particlePosition) {
         super(EntityType.BLOCK_DISPLAY);
         this.particleData = particleData;
+        this.particlePosition = particlePosition;
         this.lifeTime = particleData.lifeTime() + System.currentTimeMillis();
 
         particleData.appearance().apply(this);
+
+        variables.put("time", (System.currentTimeMillis() - getCreationTime()) / 1000.0);
+        variables.put("particleX", particlePosition.x());
+        variables.put("particleY", particlePosition.y());
+        variables.put("particleZ", particlePosition.z());
     }
 
-    public void play(Audience audience, Emitter emitter, Vec position) {
+    public void play(Audience audience, Emitter emitter) {
         this.audience = audience;
         this.emitter = emitter;
-        this.particlePosition = position;
 
         SpawnEntityPacket packet = (SpawnEntityPacket) this.getEntityType().registry().spawnType().getSpawnPacket(this);
         EntityMetaDataPacket metadataPacket = this.getMetadataPacket();
 
         int START_ENTITY_ID = this.getEntityId();
         SpawnEntityPacket fakePacket = new SpawnEntityPacket(START_ENTITY_ID, UUID.randomUUID(), packet.type(),
-                position.asPosition(), packet.headRot(), packet.data(), (short) 0, (short) 10, (short) 0);
+                particlePosition.asPosition(), packet.headRot(), packet.data(), (short) 0, (short) 10, (short) 0);
 
         EntityMetaDataPacket fakeMetadataPacket = new EntityMetaDataPacket(START_ENTITY_ID, metadataPacket.entries());
 

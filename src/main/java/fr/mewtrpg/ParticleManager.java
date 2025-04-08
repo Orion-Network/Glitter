@@ -34,13 +34,14 @@ public class ParticleManager implements Runnable {
 
         // Make direction going up in spiral
         FormulaVec directionFormula = new FormulaVec(
-                new ExpressionBuilder("1")
-                        .variable("time")
+                new ExpressionBuilder("particleX-(emitterX+offsetX)")
+                        .variables("emitterX", "particleX", "offsetX")
                         .build(),
-                new ExpressionBuilder("1")
-                        .variable("time")
+                new ExpressionBuilder("particleY-(emitterY+offsetY)")
+                        .variables("emitterY", "particleY", "offsetY")
                         .build(),
-                new ExpressionBuilder("1")
+                new ExpressionBuilder("particleZ-(emitterZ+offsetZ)")
+                        .variables("emitterZ", "particleZ", "offsetZ")
                         .build()
         );
 
@@ -83,7 +84,7 @@ public class ParticleManager implements Runnable {
                 player.getInstance(),
                 player.getPosition().asVec(),
                 particleData, 100,
-                new EmitterMode(EmitterType.LOOPING, 10000, 100),
+                new EmitterMode(EmitterType.LOOPING, 10000, 50),
                 shape
         );
 

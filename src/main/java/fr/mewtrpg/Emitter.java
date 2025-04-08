@@ -46,8 +46,18 @@ public final class Emitter implements Tickable, VariablesHolder {
     public void emit() {
         variables.put("time", (System.currentTimeMillis() - creationTime) / 1000.0);
         for (int i = 0; i < amount; i++) {
-            Particle particle = new Particle(particleData);
-            particle.play(Objects.requireNonNull(instance.getChunkAt(position)).getViewersAsAudience(), this, shape.randomPositionInShape(this).add(position));
+            Vec offset = shape.getOffset(this);
+            Vec particlePosition = shape.randomPositionInShape(this).add(position);
+            Particle particle = new Particle(particleData, particlePosition);
+            particle.getVariables().put("emitterX", position.x());
+            particle.getVariables().put("emitterY", position.y());
+            particle.getVariables().put("emitterZ", position.z());
+
+            particle.getVariables().put("offsetX", offset.x());
+            particle.getVariables().put("offsetY", offset.y());
+            particle.getVariables().put("offsetZ", offset.z());
+
+            particle.play(Objects.requireNonNull(instance.getChunkAt(position)).getViewersAsAudience(), this );
             particles.add(particle);
         }
     }

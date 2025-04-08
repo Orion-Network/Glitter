@@ -40,7 +40,7 @@ public class TestCommand extends Command {
                     motion.setDirection(new Vec(0, 1, 0));
 
                     ParticleData particleData = new ParticleData(5*1000, appearance, motion);
-                    Particle COPY_ENTITY = new Particle(particleData);
+                    Particle COPY_ENTITY = new Particle(particleData, player.getPosition().asVec());
                     int START_ENTITY_ID = COPY_ENTITY.getEntityId() + 1;
                     SpawnEntityPacket packet = (SpawnEntityPacket) COPY_ENTITY.getEntityType().registry().spawnType().getSpawnPacket(COPY_ENTITY);
                     EntityMetaDataPacket metadataPacket = COPY_ENTITY.getMetadataPacket();
@@ -84,7 +84,7 @@ public class TestCommand extends Command {
                             motion.setDirection(new Vec(0, 10, 0));
 
                             ParticleData particleData = new ParticleData(5*1000, appearance, motion);
-                            Particle particle = new Particle(particleData);
+                            Particle particle = new Particle(particleData, player.getPosition().asVec());
 
                             Emitter emitter = new Emitter(
                                     player.getInstance(),
@@ -94,7 +94,7 @@ public class TestCommand extends Command {
                                     new SphereShape(10)
                             );
 
-                            particle.play(player, emitter, player.getPosition().asVec());
+                            particle.play(player, emitter);
                             particle.tick(0);
                         } else {
                             sender.sendMessage("This command can only be used by players.");
