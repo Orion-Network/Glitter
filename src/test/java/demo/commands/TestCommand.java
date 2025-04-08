@@ -31,7 +31,7 @@ public class TestCommand extends Command {
             super("test");
             addSubcommand(new Command("emitter") {
                 {
-                    setDefaultExecutor((sender, _) -> {
+                    setDefaultExecutor((sender, context) -> {
                         sender.sendMessage("Emitter command executed!");
                     });
 
