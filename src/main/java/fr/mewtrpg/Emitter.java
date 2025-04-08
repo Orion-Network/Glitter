@@ -28,6 +28,7 @@ public final class Emitter implements Tickable, VariablesHolder {
     private final EmitterMode mode;
     private final ParticleShape shape;
 
+    private final UUID uuid = UUID.randomUUID();
     private final HashMap<String, Double> variables = new HashMap<>();
     private final long creationTime = System.currentTimeMillis();
     private long lastExecution = System.currentTimeMillis();

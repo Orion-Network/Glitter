@@ -5,10 +5,10 @@ import fr.mewtrpg.emitter.EmitterMode;
 import fr.mewtrpg.emitter.EmitterType;
 import fr.mewtrpg.emitter.shape.SphereShape;
 import fr.mewtrpg.particle.appearance.ItemAppearance;
-import fr.mewtrpg.particle.motion.Motion;
+import fr.mewtrpg.particle.motion.*;
 import fr.mewtrpg.particle.ParticleData;
-import fr.mewtrpg.particle.motion.MotionScale;
-import fr.mewtrpg.particle.motion.SimpleMotion;
+import fr.mewtrpg.utils.FormulaVariable;
+import fr.mewtrpg.utils.FormulaVec;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
@@ -19,6 +19,7 @@ import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.server.play.EntityMetaDataPacket;
 import net.minestom.server.network.packet.server.play.EntityPositionPacket;
 import net.minestom.server.network.packet.server.play.SpawnEntityPacket;
+import net.objecthunter.exp4j.ExpressionBuilder;
 
 import java.util.UUID;
 
@@ -60,9 +61,69 @@ public class TestCommand extends Command {
 
             addSubcommand(new Command("emitter") {
                 {
-                    setDefaultExecutor((sender, context) -> {
+                    setDefaultExecutor((sender, _) -> {
                         if ((sender instanceof Player player)) {
-                            ParticleManager.displayParticle(player);
+                            ItemAppearance appearance = new ItemAppearance( 1, Material.BEACON, 0, ItemDisplayMeta.DisplayContext.GROUND);
+                            appearance.setBillboardConstraints(AbstractDisplayMeta.BillboardConstraints.FIXED);
+                            appearance.setSkyLight(15);
+                            appearance.setBlockLight(15);
+
+                            // Make direction going up in spiral
+                            FormulaVec directionFormula = new FormulaVec(
+                                    new ExpressionBuilder("particleX-(emitterX+offsetX)")
+                                            .variables("emitterX", "particleX", "offsetX")
+                                            .build(),
+                                    new ExpressionBuilder("particleY-(emitterY+offsetY)")
+                                            .variables("emitterY", "particleY", "offsetY")
+                                            .build(),
+                                    new ExpressionBuilder("particleZ-(emitterZ+offsetZ)")
+                                            .variables("emitterZ", "particleZ", "offsetZ")
+                                            .build()
+                            );
+
+                            FormulaVec velocityFormula = new FormulaVec(
+                                    new ExpressionBuilder("1")
+                                            .build(),
+                                    new ExpressionBuilder("1")
+                                            .build(),
+                                    new ExpressionBuilder("1")
+                                            .build()
+                            );
+
+                            FormulaMotionScale scale = new FormulaMotionScale(
+                                    new FormulaVariable(new ExpressionBuilder("cos(time)")
+                                            .variable("time")
+                                            .build()),
+                                    new FormulaVariable(new ExpressionBuilder("0")
+                                            .build()),
+                                    new FormulaVariable(new ExpressionBuilder("0")
+                                            .build())
+                            );
+
+                            Motion motion = new FormulaMotion(directionFormula, velocityFormula, scale);
+
+                            ParticleData particleData = new ParticleData(300, appearance, motion);
+                            SphereShape shape = new SphereShape(3);
+                            shape.setOffsetFormula(
+                                    new FormulaVec(
+                                            new ExpressionBuilder("sin(time)*5")
+                                                    .variable("time")
+                                                    .build(),
+                                            new ExpressionBuilder("cos(time)*5")
+                                                    .variable("time")
+                                                    .build(),
+                                            new ExpressionBuilder("0")
+                                                    .build()
+                                    )
+                            );
+                            Emitter emitter = new Emitter(
+                                    player.getInstance(),
+                                    player.getPosition().asVec(),
+                                    particleData, 100,
+                                    new EmitterMode(EmitterType.LOOPING, 10000, 50),
+                                    shape
+                            );
+                            ParticleManager.spawnEmitter(emitter);
                         } else {
                             sender.sendMessage("This command can only be used by players.");
                         }
@@ -83,19 +144,10 @@ public class TestCommand extends Command {
                                     new MotionScale(0, 0));
                             motion.setDirection(new Vec(0, 10, 0));
 
-                            ParticleData particleData = new ParticleData(5*1000, appearance, motion);
+                            ParticleData particleData = new ParticleData(1000, appearance, motion);
                             Particle particle = new Particle(particleData, player.getPosition().asVec());
 
-                            Emitter emitter = new Emitter(
-                                    player.getInstance(),
-                                    player.getPosition().asVec(),
-                                    particleData, 100,
-                                    new EmitterMode(EmitterType.ONCE, 1000, 0),
-                                    new SphereShape(10)
-                            );
-
-                            particle.play(player, emitter);
-                            particle.tick(0);
+                            ParticleManager.spawnParticle(particle, player.getInstance());
                         } else {
                             sender.sendMessage("This command can only be used by players.");
                         }
