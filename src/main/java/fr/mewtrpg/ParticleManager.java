@@ -20,6 +20,9 @@ public class ParticleManager implements Runnable {
     private static final AtomicBoolean running = new AtomicBoolean(true);
 
     public static void spawnEmitter(Emitter emitter) {
+        if (!running.get()) {
+            throw new IllegalStateException("ParticleManager is not running");
+        }
         emitter.emit();
         emitters.add(emitter);
     }
