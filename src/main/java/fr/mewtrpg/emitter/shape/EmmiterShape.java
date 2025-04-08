@@ -7,7 +7,7 @@ import lombok.Setter;
 import net.minestom.server.coordinate.Vec;
 
 @Setter
-public abstract class ParticleShape {
+public abstract class EmmiterShape {
     private Vec offset = new Vec(0, 0, 0);
     private FormulaVec offsetFormula;
     @Getter

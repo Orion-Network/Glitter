@@ -5,7 +5,7 @@ import lombok.Getter;
 import net.minestom.server.coordinate.Vec;
 
 @Getter
-public class SphereShape extends ParticleShape {
+public class SphereShape extends EmmiterShape {
     private final double radius;
 
     public SphereShape(double radius) {

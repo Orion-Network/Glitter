@@ -5,7 +5,7 @@ import lombok.Getter;
 import net.minestom.server.coordinate.Vec;
 
 @Getter
-public class BoxShape extends ParticleShape {
+public class BoxShape extends EmmiterShape {
     private final Vec size;
 
     public BoxShape(Vec size) {

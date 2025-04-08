@@ -1,5 +1,6 @@
 package fr.mewtrpg.utils;
 
+import fr.mewtrpg.utils.functions.RandomFunction;
 import lombok.Getter;
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
@@ -15,6 +16,7 @@ public class SerializableExpression {
         this.variables = variables;
         this.expression = new ExpressionBuilder(expressionString)
                 .variables(variables)
+                .function(new RandomFunction())
                 .build();
     }
 }

@@ -14,7 +14,7 @@ public class EmitterMode {
 
     public EmitterMode(EmitterType type, long lifeTime, long delay) {
         this.type = type;
-        this.lifeTime = System.currentTimeMillis() + lifeTime;
+        this.lifeTime = lifeTime;
         this.delay = delay;
     }
 }

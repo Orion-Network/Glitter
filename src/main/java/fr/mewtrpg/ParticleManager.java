@@ -2,24 +2,11 @@ package fr.mewtrpg;
 
 import fr.mewtrpg.emitter.EmitterMode;
 import fr.mewtrpg.emitter.EmitterType;
-import fr.mewtrpg.emitter.shape.ParticleShape;
-import fr.mewtrpg.emitter.shape.PointShape;
+import fr.mewtrpg.emitter.shape.EmmiterShape;
 import fr.mewtrpg.emitter.shape.SphereShape;
 import fr.mewtrpg.particle.*;
-import fr.mewtrpg.particle.appearance.ItemAppearance;
-import fr.mewtrpg.particle.motion.FormulaMotion;
-import fr.mewtrpg.particle.motion.FormulaMotionScale;
-import fr.mewtrpg.particle.motion.Motion;
-import fr.mewtrpg.utils.FormulaVariable;
-import fr.mewtrpg.utils.FormulaVec;
-import net.kyori.adventure.audience.Audience;
 import net.minestom.server.coordinate.Vec;
-import net.minestom.server.entity.Player;
-import net.minestom.server.entity.metadata.display.AbstractDisplayMeta;
-import net.minestom.server.entity.metadata.display.ItemDisplayMeta;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.item.Material;
-import net.objecthunter.exp4j.ExpressionBuilder;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
@@ -37,7 +24,7 @@ public class ParticleManager implements Runnable {
         emitters.add(emitter);
     }
 
-    public static void spawnEmitter(Instance instance, Vec position, ParticleData particleData, int amount, EmitterMode mode, ParticleShape shape) {
+    public static void spawnEmitter(Instance instance, Vec position, ParticleData particleData, int amount, EmitterMode mode, EmmiterShape shape) {
         Emitter emitter = new Emitter(
                 instance,
                 position,

@@ -3,7 +3,7 @@ package fr.mewtrpg;
 import fr.mewtrpg.emitter.EmitterData;
 import fr.mewtrpg.emitter.EmitterMode;
 import fr.mewtrpg.emitter.EmitterType;
-import fr.mewtrpg.emitter.shape.ParticleShape;
+import fr.mewtrpg.emitter.shape.EmmiterShape;
 import fr.mewtrpg.particle.ParticleData;
 import fr.mewtrpg.utils.VariablesHolder;
 import lombok.Getter;
@@ -25,6 +25,7 @@ public final class Emitter implements Tickable, VariablesHolder {
     private final Instance instance;
     private final Vec position;
     private final EmitterData emitterData;
+    private final long lifeTime;
 
     private final UUID uuid = UUID.randomUUID();
     private final HashMap<String, Double> variables = new HashMap<>();
@@ -35,9 +36,10 @@ public final class Emitter implements Tickable, VariablesHolder {
         this.instance = instance;
         this.position = position;
         this.emitterData = emitterData;
+        this.lifeTime = emitterData.mode().getLifeTime() + System.currentTimeMillis();
     }
 
-    public Emitter(Instance instance, Vec position, ParticleData particleData, int amount, EmitterMode mode, ParticleShape shape) {
+    public Emitter(Instance instance, Vec position, ParticleData particleData, int amount, EmitterMode mode, EmmiterShape shape) {
         this(instance, position, new EmitterData(particleData, amount, mode, shape));
 
     }
@@ -87,7 +89,7 @@ public final class Emitter implements Tickable, VariablesHolder {
     }
 
     public boolean isDead() {
-        return (emitterData.mode().getType() == EmitterType.LOOPING && System.currentTimeMillis() > emitterData.mode().getLifeTime());
+        return (emitterData.mode().getType() == EmitterType.LOOPING && System.currentTimeMillis() > this.getLifeTime());
     }
 
 }

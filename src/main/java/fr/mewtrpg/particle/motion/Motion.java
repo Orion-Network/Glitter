@@ -9,6 +9,7 @@ import net.minestom.server.entity.metadata.display.AbstractDisplayMeta;
 import net.minestom.server.network.packet.server.play.EntityMetaDataPacket;
 import net.minestom.server.network.packet.server.play.EntityPositionPacket;
 import net.minestom.server.utils.PacketUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 
@@ -24,8 +25,14 @@ public abstract class Motion{
 
         AbstractDisplayMeta displayMeta = (AbstractDisplayMeta) particle.getEntityMeta();
         if (System.currentTimeMillis() > particle.getLifeTime() - getMotionScale(particle).duration()) {
-            double scaleFactor = (System.currentTimeMillis() - (particle.getLifeTime() - getMotionScale(particle).duration())) / getMotionScale(particle).duration();
-            displayMeta.setScale(new Vec(getMotionScale(particle).size() * scaleFactor, getMotionScale(particle).size() * scaleFactor, getMotionScale(particle).size() * scaleFactor));
+            double startSize = particle.getParticleData().appearance().getSize();
+            double endSize = getMotionScale(particle).size();
+            double scaleDiff = endSize - startSize;;
+            double progress = (System.currentTimeMillis() - (particle.getLifeTime() - getMotionScale(particle).duration())) / getMotionScale(particle).duration();
+            progress = Math.min(1.0, Math.max(0.0, progress));
+            double newSize = startSize + (scaleDiff * progress);
+            displayMeta.setScale(new Vec(newSize, newSize, newSize));
+
             EntityMetaDataPacket metadataPacket = particle.getMetadataPacket();
             PacketUtils.sendPacket(particle.getAudience(), new EntityMetaDataPacket(particle.getEntityId(), metadataPacket.entries()));
         }

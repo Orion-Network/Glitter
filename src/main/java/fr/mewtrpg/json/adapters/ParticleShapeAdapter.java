@@ -2,16 +2,16 @@ package fr.mewtrpg.json.adapters;
 
 import com.google.gson.*;
 import fr.mewtrpg.emitter.shape.BoxShape;
-import fr.mewtrpg.emitter.shape.ParticleShape;
+import fr.mewtrpg.emitter.shape.EmmiterShape;
 import fr.mewtrpg.emitter.shape.PointShape;
 import fr.mewtrpg.emitter.shape.SphereShape;
 import net.minestom.server.coordinate.Vec;
 
 import java.lang.reflect.Type;
 
-public class ParticleShapeAdapter implements JsonSerializer<ParticleShape>, JsonDeserializer<ParticleShape> {
+public class ParticleShapeAdapter implements JsonSerializer<EmmiterShape>, JsonDeserializer<EmmiterShape> {
     @Override
-    public ParticleShape deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+    public EmmiterShape deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         JsonObject jsonObject = json.getAsJsonObject();
         String type = jsonObject.get("type").getAsString();
 
@@ -30,7 +30,7 @@ public class ParticleShapeAdapter implements JsonSerializer<ParticleShape>, Json
     }
 
     @Override
-    public JsonElement serialize(ParticleShape src, Type typeOfSrc, JsonSerializationContext context) {
+    public JsonElement serialize(EmmiterShape src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("type", src.getClass().getSimpleName());
         switch (src.getClass().getSimpleName()) {
