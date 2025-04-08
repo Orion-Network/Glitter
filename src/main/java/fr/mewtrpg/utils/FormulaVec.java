@@ -6,22 +6,22 @@ import net.objecthunter.exp4j.Expression;
 import java.util.HashMap;
 
 public class FormulaVec {
-    Expression x, y, z;
+    SerializableExpression x, y, z;
 
-    public FormulaVec(Expression x, Expression y, Expression z) {
+    public FormulaVec(SerializableExpression x, SerializableExpression y, SerializableExpression z) {
         this.x = x;
         this.y = y;
         this.z = z;
     }
 
     public void apply(VariablesHolder variables) {
-        x.setVariables(variables.getVariables());
-        y.setVariables(variables.getVariables());
-        z.setVariables(variables.getVariables());
+        x.getExpression().setVariables(variables.getVariables());
+        y.getExpression().setVariables(variables.getVariables());
+        z.getExpression().setVariables(variables.getVariables());
     }
 
     public Vec getVec(VariablesHolder variables) {
         apply(variables);
-        return new Vec(x.evaluate(), y.evaluate(), z.evaluate());
+        return new Vec(x.getExpression().evaluate(), y.getExpression().evaluate(), z.getExpression().evaluate());
     }
 }

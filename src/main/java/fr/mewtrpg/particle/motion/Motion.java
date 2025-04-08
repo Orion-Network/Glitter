@@ -15,9 +15,6 @@ import java.util.HashMap;
 
 @Getter
 public abstract class Motion{
-    @Setter
-    private Vec direction = new Vec(0, 0, 0);
-
     private final HashMap<String, Double> variables = new HashMap<>();
 
     public void apply(Particle particle) {

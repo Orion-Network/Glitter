@@ -5,18 +5,18 @@ import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
 
 public class FormulaVariable {
-    private final Expression expression;
+    private final SerializableExpression expression;
 
-    public FormulaVariable(Expression expression) {
+    public FormulaVariable(SerializableExpression expression) {
         this.expression = expression;
     }
 
     public void apply(VariablesHolder variables) {
-        expression.setVariables(variables.getVariables());
+        expression.getExpression().setVariables(variables.getVariables());
     }
 
     public double getValue(VariablesHolder variables) {
         apply(variables);
-        return expression.evaluate();
+        return expression.getExpression().evaluate();
     }
 }

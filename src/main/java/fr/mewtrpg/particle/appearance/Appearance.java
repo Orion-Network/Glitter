@@ -7,17 +7,15 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.metadata.display.AbstractDisplayMeta;
 
 @Getter@Setter
-public class Appearance {
-    private final Mode mode;
+public abstract class Appearance {
     private final double size;
     private AbstractDisplayMeta.BillboardConstraints billboardConstraints = AbstractDisplayMeta.BillboardConstraints.CENTER;
     private boolean hasPhysics = false;
     private boolean emissive = false;
     private int skyLight = 0, blockLight = 0;
-    private float view_range = 25;
+    private float viewRange = 25;
 
-    public Appearance(Mode mode, double size) {
-        this.mode = mode;
+    public Appearance(double size) {
         this.size = size;
     }
 
@@ -34,13 +32,6 @@ public class Appearance {
             displayMeta.setBrightnessOverride((0xF) << 4 | (0xF) << 20);
         displayMeta.setBrightnessOverride((blockLight & 0xF) << 4 | (skyLight & 0xF) << 20);
 
-        displayMeta.setViewRange(view_range);
-    }
-
-    public enum Mode {
-        BLOCK,
-        ITEM,
-        ENTITY,
-        IMAGE
+        displayMeta.setViewRange(viewRange);
     }
 }

@@ -1,3 +1,5 @@
+package demo;
+
 import fr.mewtrpg.ParticleManager;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -71,7 +73,7 @@ public class Demo {
         // Start the server on port 25565
         minecraftServer.start("0.0.0.0", 25565);
 
-        MinecraftServer.getCommandManager().register(new commands.TestCommand());
+        MinecraftServer.getCommandManager().register(new demo.commands.TestCommand());
 
         ParticleManager.start();
     }

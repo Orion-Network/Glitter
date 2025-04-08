@@ -60,11 +60,9 @@ public class ParticleManager implements Runnable {
     }
 
     public static void start() {
-        // Démarrer le thread de traitement
         executor.submit(() -> {
             while (running.get()) {
                 try {
-                    // Traitement par lots pour éviter de bloquer trop longtemps
                     for (Emitter emitter : emitters) {
                         if (emitter.isDead()) {
                             emitter.destroy();
@@ -73,7 +71,7 @@ public class ParticleManager implements Runnable {
                         }
                         emitter.tick(0);
                     }
-                    Thread.sleep(50); // 20 ticks par seconde (~50ms)
+                    Thread.sleep(50);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                     break;
@@ -91,10 +89,10 @@ public class ParticleManager implements Runnable {
 
     @Override
     public void run() {
-        for (Emitter emitter : emitters) { // Iteration thread-safe
+        for (Emitter emitter : emitters) {
             if (emitter.isDead()) {
                 emitter.destroy();
-                emitters.remove(emitter); // Safe avec CopyOnWriteArrayList
+                emitters.remove(emitter);
                 continue;
             }
             emitter.tick(0);

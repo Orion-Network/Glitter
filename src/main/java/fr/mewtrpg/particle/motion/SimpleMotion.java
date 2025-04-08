@@ -9,11 +9,12 @@ import org.jetbrains.annotations.NotNull;
 public class SimpleMotion extends Motion {
     private final MotionMode mode;
     private final double speed;
-    private final Vec acceleration;
+    private final Vec direction, acceleration;
     private final MotionScale scale;
 
-    public SimpleMotion(MotionMode mode, double speed, Vec acceleration, MotionScale scale) {
+    public SimpleMotion(MotionMode mode, double speed, Vec direction, Vec acceleration, MotionScale scale) {
         this.mode = mode;
+        this.direction = direction;
         this.speed = speed;
         this.acceleration = acceleration;
         this.scale = scale;

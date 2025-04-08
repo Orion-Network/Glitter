@@ -1,4 +1,4 @@
-package commands;
+package demo.commands;
 
 import fr.mewtrpg.*;
 import fr.mewtrpg.emitter.EmitterMode;
@@ -9,6 +9,7 @@ import fr.mewtrpg.particle.motion.*;
 import fr.mewtrpg.particle.ParticleData;
 import fr.mewtrpg.utils.FormulaVariable;
 import fr.mewtrpg.utils.FormulaVec;
+import fr.mewtrpg.utils.SerializableExpression;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
@@ -19,7 +20,6 @@ import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.server.play.EntityMetaDataPacket;
 import net.minestom.server.network.packet.server.play.EntityPositionPacket;
 import net.minestom.server.network.packet.server.play.SpawnEntityPacket;
-import net.objecthunter.exp4j.ExpressionBuilder;
 
 import java.util.UUID;
 
@@ -36,9 +36,8 @@ public class TestCommand extends Command {
 
                     Motion motion = new SimpleMotion(
                             SimpleMotion.MotionMode.OUTWARD,
-                            1, new Vec(0, 0, 0),
+                            1,new Vec(0, 1, 0), new Vec(0, 0, 0),
                             new MotionScale(0, 0));
-                    motion.setDirection(new Vec(0, 1, 0));
 
                     ParticleData particleData = new ParticleData(5*1000, appearance, motion);
                     Particle COPY_ENTITY = new Particle(particleData, player.getPosition().asVec());
@@ -70,34 +69,21 @@ public class TestCommand extends Command {
 
                             // Make direction going up in spiral
                             FormulaVec directionFormula = new FormulaVec(
-                                    new ExpressionBuilder("particleX-(emitterX+offsetX)")
-                                            .variables("emitterX", "particleX", "offsetX")
-                                            .build(),
-                                    new ExpressionBuilder("particleY-(emitterY+offsetY)")
-                                            .variables("emitterY", "particleY", "offsetY")
-                                            .build(),
-                                    new ExpressionBuilder("particleZ-(emitterZ+offsetZ)")
-                                            .variables("emitterZ", "particleZ", "offsetZ")
-                                            .build()
+                                    new SerializableExpression("particleX-(emitterX+offsetX)", "particleX", "emitterX", "offsetX"),
+                                    new SerializableExpression("particleY-(emitterY+offsetY)", "particleY", "emitterY", "offsetY"),
+                                    new SerializableExpression("particleZ-(emitterZ+offsetZ)", "particleZ", "emitterZ", "offsetZ")
                             );
 
                             FormulaVec velocityFormula = new FormulaVec(
-                                    new ExpressionBuilder("1")
-                                            .build(),
-                                    new ExpressionBuilder("1")
-                                            .build(),
-                                    new ExpressionBuilder("1")
-                                            .build()
+                                    new SerializableExpression("1"),
+                                    new SerializableExpression("1"),
+                                    new SerializableExpression("1")
                             );
 
                             FormulaMotionScale scale = new FormulaMotionScale(
-                                    new FormulaVariable(new ExpressionBuilder("cos(time)")
-                                            .variable("time")
-                                            .build()),
-                                    new FormulaVariable(new ExpressionBuilder("0")
-                                            .build()),
-                                    new FormulaVariable(new ExpressionBuilder("0")
-                                            .build())
+                                    new FormulaVariable(new SerializableExpression("cos(time)", "time")),
+                                    new FormulaVariable(new SerializableExpression("0")),
+                                    new FormulaVariable(new SerializableExpression("0"))
                             );
 
                             Motion motion = new FormulaMotion(directionFormula, velocityFormula, scale);
@@ -106,14 +92,9 @@ public class TestCommand extends Command {
                             SphereShape shape = new SphereShape(3);
                             shape.setOffsetFormula(
                                     new FormulaVec(
-                                            new ExpressionBuilder("sin(time)*5")
-                                                    .variable("time")
-                                                    .build(),
-                                            new ExpressionBuilder("cos(time)*5")
-                                                    .variable("time")
-                                                    .build(),
-                                            new ExpressionBuilder("0")
-                                                    .build()
+                                            new SerializableExpression("sin(time)*5", "time"),
+                                            new SerializableExpression("cos(time)*5", "time"),
+                                            new SerializableExpression("0")
                                     )
                             );
                             Emitter emitter = new Emitter(
@@ -140,9 +121,8 @@ public class TestCommand extends Command {
 
                             Motion motion = new SimpleMotion(
                                     SimpleMotion.MotionMode.DIRECTION,
-                                    1, new Vec(0, 0, 0),
+                                    1, new Vec(0, 10, 0), new Vec(0, 0, 0),
                                     new MotionScale(0, 0));
-                            motion.setDirection(new Vec(0, 10, 0));
 
                             ParticleData particleData = new ParticleData(1000, appearance, motion);
                             Particle particle = new Particle(particleData, player.getPosition().asVec());
