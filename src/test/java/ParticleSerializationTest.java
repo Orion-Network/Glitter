@@ -19,7 +19,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ParticleSerializationTest {
-    Gson gson = new ParticleGson().GSON;
+    Gson gson = ParticleGson.GSON;
     @Test
     public void testSimpleParticleSerialization() {
         ItemAppearance appearance = new ItemAppearance(1, Material.OAK_BOAT, 0, ItemDisplayMeta.DisplayContext.GROUND);

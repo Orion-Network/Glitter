@@ -1,5 +1,6 @@
 package fr.mewtrpg;
 
+import fr.mewtrpg.emitter.EmitterData;
 import fr.mewtrpg.emitter.EmitterMode;
 import fr.mewtrpg.emitter.EmitterType;
 import fr.mewtrpg.emitter.shape.ParticleShape;
@@ -23,33 +24,31 @@ public final class Emitter implements Tickable, VariablesHolder {
 
     private final Instance instance;
     private final Vec position;
-    private final ParticleData particleData;
-    private final int amount;
-    private final EmitterMode mode;
-    private final ParticleShape shape;
+    private final EmitterData emitterData;
 
     private final UUID uuid = UUID.randomUUID();
     private final HashMap<String, Double> variables = new HashMap<>();
     private final long creationTime = System.currentTimeMillis();
     private long lastExecution = System.currentTimeMillis();
 
-    public Emitter(Instance instance, Vec position, ParticleData particleData, int amount, EmitterMode mode, ParticleShape shape) {
+    public Emitter(Instance instance, Vec position, EmitterData emitterData) {
         this.instance = instance;
         this.position = position;
-        this.particleData = particleData;
-        this.amount = amount;
-        this.mode = mode;
-        this.shape = shape;
+        this.emitterData = emitterData;
+    }
+
+    public Emitter(Instance instance, Vec position, ParticleData particleData, int amount, EmitterMode mode, ParticleShape shape) {
+        this(instance, position, new EmitterData(particleData, amount, mode, shape));
 
     }
 
 
     public void emit() {
         variables.put("time", (System.currentTimeMillis() - creationTime) / 1000.0);
-        for (int i = 0; i < amount; i++) {
-            Vec offset = shape.getOffset(this);
-            Vec particlePosition = shape.randomPositionInShape(this).add(position);
-            Particle particle = new Particle(particleData, particlePosition);
+        for (int i = 0; i < emitterData.amount(); i++) {
+            Vec offset = emitterData.shape().getOffset(this);
+            Vec particlePosition = emitterData.shape().randomPositionInShape(this).add(position);
+            Particle particle = new Particle(emitterData.particleData(), particlePosition);
             particle.getVariables().put("emitterX", position.x());
             particle.getVariables().put("emitterY", position.y());
             particle.getVariables().put("emitterZ", position.z());
@@ -72,7 +71,7 @@ public final class Emitter implements Tickable, VariablesHolder {
 
     @Override
     public void tick(long l) {
-        if (lastExecution + mode.getDelay() < System.currentTimeMillis()) {
+        if (lastExecution + emitterData.mode().getDelay() < System.currentTimeMillis()) {
             emit();
             lastExecution = System.currentTimeMillis();
         }
@@ -88,7 +87,7 @@ public final class Emitter implements Tickable, VariablesHolder {
     }
 
     public boolean isDead() {
-        return (mode.getType() == EmitterType.LOOPING && System.currentTimeMillis() > mode.getLifeTime());
+        return (emitterData.mode().getType() == EmitterType.LOOPING && System.currentTimeMillis() > emitterData.mode().getLifeTime());
     }
 
 }

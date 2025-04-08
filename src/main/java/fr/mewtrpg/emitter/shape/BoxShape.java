@@ -1,8 +1,10 @@
 package fr.mewtrpg.emitter.shape;
 
 import fr.mewtrpg.Emitter;
+import lombok.Getter;
 import net.minestom.server.coordinate.Vec;
 
+@Getter
 public class BoxShape extends ParticleShape {
     private final Vec size;
 

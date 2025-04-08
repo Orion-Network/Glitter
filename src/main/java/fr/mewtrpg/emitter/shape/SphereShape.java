@@ -1,8 +1,10 @@
 package fr.mewtrpg.emitter.shape;
 
 import fr.mewtrpg.Emitter;
+import lombok.Getter;
 import net.minestom.server.coordinate.Vec;
 
+@Getter
 public class SphereShape extends ParticleShape {
     private final double radius;
 
