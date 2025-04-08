@@ -61,13 +61,7 @@ public class Demo {
             final Component header = Component.newline()
                     .append(Component.text("RAM USAGE: " + ramUsage + " MB", NamedTextColor.GRAY).append(Component.newline())
                             .append(Component.text("TICK TIME: " + MathUtils.round(tickMonitor.getTickTime(), 2) + "ms", NamedTextColor.GRAY))).append(Component.newline());
-
-            final Component footer = Component.newline()
-                    .append(Component.text("          WorldSeed Entity Engine          ")
-                            .color(TextColor.color(57, 200, 73))
-                            .append(Component.newline()));
-
-            Audiences.players().sendPlayerListHeaderAndFooter(header, footer);
+            Audiences.players().sendPlayerListHeaderAndFooter(header, Component.empty());
         }, TaskSchedule.tick(10), TaskSchedule.tick(10));
 
         // Start the server on port 25565

@@ -82,7 +82,7 @@ public class Samples {
 
     public static void addFireEmitter() {
         ItemAppearance appearance = new ItemAppearance( 0.5, Material.FIRE_CHARGE, 0, ItemDisplayMeta.DisplayContext.FIXED);
-        appearance.setBillboardConstraints(AbstractDisplayMeta.BillboardConstraints.FIXED);
+        appearance.setBillboardConstraints(AbstractDisplayMeta.BillboardConstraints.VERTICAL);
         appearance.setSkyLight(15);
         appearance.setBlockLight(15);
 
@@ -99,9 +99,9 @@ public class Samples {
                         new SerializableExpression("cos(random(0,1)*3.14)")
                 ),
                 new FormulaVec(
-                        new SerializableExpression("1"),
                         new SerializableExpression("0.1"),
-                        new SerializableExpression("1")
+                        new SerializableExpression("random(0.05,0.1)"),
+                        new SerializableExpression("0.1")
                 ),
                 scale
         );
