@@ -10,12 +10,9 @@ import net.minestom.server.entity.metadata.display.AbstractDisplayMeta;
 public abstract class Appearance {
     private final double size;
     private AbstractDisplayMeta.BillboardConstraints billboardConstraints = AbstractDisplayMeta.BillboardConstraints.CENTER;
-    private boolean hasPhysics = false;
-    private boolean emissive = false;
-    private int skyLight = 0, blockLight = 0;
-    private float viewRange = 25;
-    private boolean hasGlow = false;
-    private int glowColor = 0xFFFFFF;
+    private boolean hasPhysics = false, emissive = false, hasGlow = false;
+    private int skyLight = 0, blockLight = 0, glowColor = 0xFFFFFF;
+    private float viewRange = 25, yawn = 0, pitch = 0;
 
     public Appearance(double size) {
         this.size = size;
@@ -24,6 +21,7 @@ public abstract class Appearance {
     public void apply(Particle particle) {
         particle.setNoGravity(true);
         particle.setPhysics(hasPhysics);
+        particle.setParticlePosition(particle.getParticlePosition().withView(yawn, pitch));
 
         AbstractDisplayMeta displayMeta = (AbstractDisplayMeta) particle.getEntityMeta();
         displayMeta.setPosRotInterpolationDuration(5);

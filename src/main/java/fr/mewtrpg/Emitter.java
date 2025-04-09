@@ -8,6 +8,7 @@ import fr.mewtrpg.particle.ParticleData;
 import fr.mewtrpg.utils.VariablesHolder;
 import lombok.Getter;
 import lombok.Setter;
+import net.kyori.adventure.audience.Audience;
 import net.minestom.server.Tickable;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
@@ -54,11 +55,11 @@ public final class Emitter implements Tickable, VariablesHolder {
     public void emit() {
         variables.put("time", (System.currentTimeMillis() - creationTime) / 1000.0);
         for (int i = 0; i < emitterData.amount(); i++) {
-            Vec offset = emitterData.shape().getOffset(this);
-            Vec particlePosition = emitterData.shape().randomPositionInShape(this).add(getPosition());
+            Pos offset = emitterData.shape().getOffset(this);
+            Pos particlePosition = emitterData.shape().randomPositionInShape(this).add(getPosition());
             Particle particle = new Particle(emitterData.particleData(), particlePosition);
             if(rotateAroundPosition)
-                particle.setParticlePosition(rotatePosition(particle.getParticlePosition().asPosition(), getPosition(), getPosition().yaw(), getPosition().pitch()).asVec());
+                particle.setParticlePosition(rotatePosition(particle.getParticlePosition(), getPosition(), getPosition().yaw(), getPosition().pitch()));
 
             particle.getVariables().put("emitterX", getPosition().x());
             particle.getVariables().put("emitterY", getPosition().y());
@@ -70,7 +71,9 @@ public final class Emitter implements Tickable, VariablesHolder {
             particle.getVariables().put("offsetY", offset.y());
             particle.getVariables().put("offsetZ", offset.z());
 
-            particle.play(Objects.requireNonNull(instance.getChunkAt(getPosition())).getViewersAsAudience(), this );
+            Audience audience = Objects.requireNonNull(instance.getChunkAt(getPosition())).getViewersAsAudience();
+
+            particle.play(audience, this );
             particles.add(particle);
         }
     }

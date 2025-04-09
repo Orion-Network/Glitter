@@ -1,9 +1,8 @@
-package fr.mewtrpg.utils;
+package fr.mewtrpg.utils.formula;
 
+import fr.mewtrpg.utils.SerializableExpression;
+import fr.mewtrpg.utils.VariablesHolder;
 import net.minestom.server.coordinate.Vec;
-import net.objecthunter.exp4j.Expression;
-
-import java.util.HashMap;
 
 public class FormulaVec {
     SerializableExpression x, y, z;

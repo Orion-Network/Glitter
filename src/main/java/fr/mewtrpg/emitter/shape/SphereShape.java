@@ -2,6 +2,7 @@ package fr.mewtrpg.emitter.shape;
 
 import fr.mewtrpg.Emitter;
 import lombok.Getter;
+import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 
 @Getter
@@ -13,7 +14,7 @@ public class SphereShape extends EmmiterShape {
     }
 
     @Override
-    public Vec randomPositionInShape(Emitter emitter) {
+    public Pos randomPositionInShape(Emitter emitter) {
         if(isSurface()) {
             double theta = Math.random() * 2 * Math.PI;
             double phi = Math.acos(1 - 2 * Math.random());
@@ -21,7 +22,7 @@ public class SphereShape extends EmmiterShape {
             double y = radius * Math.sin(phi) * Math.sin(theta);
             double z = radius * Math.cos(phi);
 
-            return new Vec(x, y, z).add(getOffset(emitter));
+            return new Pos(x, y, z).add(getOffset(emitter));
         }
 
         double x = Math.random() * 2 * radius - radius;
@@ -33,6 +34,6 @@ public class SphereShape extends EmmiterShape {
             y = (y / distance) * radius;
             z = (z / distance) * radius;
         }
-        return new Vec(x, y, z).add(getOffset(emitter));
+        return new Pos(x, y, z).add(getOffset(emitter));
     }
 }

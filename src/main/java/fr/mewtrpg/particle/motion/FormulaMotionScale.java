@@ -1,7 +1,6 @@
 package fr.mewtrpg.particle.motion;
 
-import fr.mewtrpg.Particle;
-import fr.mewtrpg.utils.FormulaVariable;
+import fr.mewtrpg.utils.formula.FormulaVariable;
 import fr.mewtrpg.utils.VariablesHolder;
 
 public class FormulaMotionScale {

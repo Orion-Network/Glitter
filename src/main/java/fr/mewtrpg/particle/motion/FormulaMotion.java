@@ -1,7 +1,7 @@
 package fr.mewtrpg.particle.motion;
 
 import fr.mewtrpg.Particle;
-import fr.mewtrpg.utils.FormulaVec;
+import fr.mewtrpg.utils.formula.FormulaVec;
 import lombok.Getter;
 import net.minestom.server.coordinate.Vec;
 import org.jetbrains.annotations.NotNull;

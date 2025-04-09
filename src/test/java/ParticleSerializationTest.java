@@ -1,20 +1,15 @@
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import fr.mewtrpg.Particle;
 import fr.mewtrpg.json.ParticleGson;
 import fr.mewtrpg.particle.ParticleData;
-import fr.mewtrpg.particle.appearance.Appearance;
 import fr.mewtrpg.particle.appearance.ItemAppearance;
 import fr.mewtrpg.particle.motion.*;
-import fr.mewtrpg.utils.FormulaVariable;
-import fr.mewtrpg.utils.FormulaVec;
+import fr.mewtrpg.utils.formula.FormulaVariable;
+import fr.mewtrpg.utils.formula.FormulaVec;
 import fr.mewtrpg.utils.SerializableExpression;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.metadata.display.AbstractDisplayMeta;
 import net.minestom.server.entity.metadata.display.ItemDisplayMeta;
 import net.minestom.server.item.Material;
-import net.objecthunter.exp4j.Expression;
-import net.objecthunter.exp4j.ExpressionBuilder;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

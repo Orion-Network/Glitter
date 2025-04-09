@@ -25,14 +25,14 @@ public class Particle extends Entity implements VariablesHolder {
     final long lifeTime;
     private Emitter emitter;
     @Setter
-    private Vec particlePosition;
+    private Pos particlePosition;
     private Audience audience;
 
     private final HashMap<String, Double> variables = new HashMap<>();
     private final long creationTime = System.currentTimeMillis();
 
 
-    public Particle(ParticleData particleData, Vec particlePosition) {
+    public Particle(ParticleData particleData, Pos particlePosition) {
         super(EntityType.BLOCK_DISPLAY);
         this.particleData = particleData;
         this.particlePosition = particlePosition;
@@ -55,7 +55,7 @@ public class Particle extends Entity implements VariablesHolder {
 
         int START_ENTITY_ID = this.getEntityId();
         SpawnEntityPacket fakePacket = new SpawnEntityPacket(START_ENTITY_ID, UUID.randomUUID(), packet.type(),
-                particlePosition.asPosition(), packet.headRot(), packet.data(), (short) 0, (short) 10, (short) 0);
+                particlePosition, packet.headRot(), packet.data(), (short) 0, (short) 10, (short) 0);
 
         EntityMetaDataPacket fakeMetadataPacket = new EntityMetaDataPacket(START_ENTITY_ID, metadataPacket.entries());
 

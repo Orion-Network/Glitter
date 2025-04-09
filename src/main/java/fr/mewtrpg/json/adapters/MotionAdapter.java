@@ -4,7 +4,7 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializer;
 import fr.mewtrpg.particle.motion.*;
-import fr.mewtrpg.utils.FormulaVec;
+import fr.mewtrpg.utils.formula.FormulaVec;
 import net.minestom.server.coordinate.Vec;
 
 public class MotionAdapter implements JsonSerializer<Motion>, JsonDeserializer<Motion> {

@@ -9,8 +9,9 @@ import fr.mewtrpg.emitter.shape.PointShape;
 import fr.mewtrpg.particle.ParticleData;
 import fr.mewtrpg.particle.appearance.ItemAppearance;
 import fr.mewtrpg.particle.motion.*;
-import fr.mewtrpg.utils.FormulaVariable;
-import fr.mewtrpg.utils.FormulaVec;
+import fr.mewtrpg.utils.formula.FormulaPos;
+import fr.mewtrpg.utils.formula.FormulaVariable;
+import fr.mewtrpg.utils.formula.FormulaVec;
 import fr.mewtrpg.utils.SerializableExpression;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.metadata.display.AbstractDisplayMeta;
@@ -29,17 +30,18 @@ public class Samples {
     }
 
     static void addLoadingEmitter() {
-        ItemAppearance appearance = new ItemAppearance( 1, Material.BEACON, 0, ItemDisplayMeta.DisplayContext.HEAD);
+        ItemAppearance appearance = new ItemAppearance( 1, Material.HEART_OF_THE_SEA, 0, ItemDisplayMeta.DisplayContext.HEAD);
         appearance.setBillboardConstraints(AbstractDisplayMeta.BillboardConstraints.FIXED);
         appearance.setSkyLight(15);
         appearance.setBlockLight(15);
-
+        appearance.setYawn(90);
+        appearance.setPitch(90);
         SimpleMotion simpleMotion = new SimpleMotion(SimpleMotion.MotionMode.DIRECTION, 0, new Vec(0, 0, 0), new Vec(0, 0, 0), new MotionScale(0, 2050));
 
         ParticleData particleData = new ParticleData(2300, appearance, simpleMotion);
         EmmiterShape shape = new PointShape();
         shape.setOffsetFormula(
-                new FormulaVec(
+                new FormulaPos(
                         new SerializableExpression("sin(time*3)*5", "time"),
                         new SerializableExpression("cos(time*3)*5", "time"),
                         new SerializableExpression("0")
@@ -65,7 +67,7 @@ public class Samples {
         ParticleData particleData = new ParticleData(2300, appearance, simpleMotion);
         EmmiterShape shape = new BoxShape(new Vec(100,100,100));
         shape.setOffsetFormula(
-                new FormulaVec(
+                new FormulaPos(
                         new SerializableExpression("sin(time)*5", "time"),
                         new SerializableExpression("sin(time)*5", "time"),
                         new SerializableExpression("sin(time)*5", "time")

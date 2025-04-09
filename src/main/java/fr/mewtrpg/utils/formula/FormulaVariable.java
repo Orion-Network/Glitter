@@ -1,8 +1,8 @@
-package fr.mewtrpg.utils;
+package fr.mewtrpg.utils.formula;
 
 
-import net.objecthunter.exp4j.Expression;
-import net.objecthunter.exp4j.ExpressionBuilder;
+import fr.mewtrpg.utils.SerializableExpression;
+import fr.mewtrpg.utils.VariablesHolder;
 
 public class FormulaVariable {
     private final SerializableExpression expression;

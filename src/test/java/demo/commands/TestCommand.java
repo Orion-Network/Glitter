@@ -3,28 +3,11 @@ package demo.commands;
 import demo.utils.Samples;
 import fr.mewtrpg.*;
 import fr.mewtrpg.emitter.EmitterData;
-import fr.mewtrpg.particle.appearance.ItemAppearance;
-import fr.mewtrpg.particle.motion.*;
-import fr.mewtrpg.particle.ParticleData;
-import fr.mewtrpg.utils.FormulaVariable;
-import fr.mewtrpg.utils.FormulaVec;
-import fr.mewtrpg.utils.SerializableExpression;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.arguments.ArgumentBoolean;
 import net.minestom.server.command.builder.arguments.ArgumentWord;
 import net.minestom.server.command.builder.suggestion.SuggestionEntry;
-import net.minestom.server.coordinate.Pos;
-import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Player;
-import net.minestom.server.entity.metadata.display.AbstractDisplayMeta;
-import net.minestom.server.entity.metadata.display.ItemDisplayMeta;
-import net.minestom.server.item.Material;
-import net.minestom.server.network.packet.server.play.EntityMetaDataPacket;
-import net.minestom.server.network.packet.server.play.EntityPositionPacket;
-import net.minestom.server.network.packet.server.play.SpawnEntityPacket;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.UUID;
 
 public class TestCommand extends Command {
 

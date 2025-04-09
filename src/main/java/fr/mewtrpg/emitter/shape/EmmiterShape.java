@@ -1,22 +1,23 @@
 package fr.mewtrpg.emitter.shape;
 
 import fr.mewtrpg.Emitter;
-import fr.mewtrpg.utils.FormulaVec;
+import fr.mewtrpg.utils.formula.FormulaPos;
+import fr.mewtrpg.utils.formula.FormulaVec;
 import lombok.Getter;
 import lombok.Setter;
-import net.minestom.server.coordinate.Vec;
+import net.minestom.server.coordinate.Pos;
 
 @Setter
 public abstract class EmmiterShape {
-    private Vec offset = new Vec(0, 0, 0);
-    private FormulaVec offsetFormula;
+    private Pos offset = new Pos(0, 0, 0);
+    private FormulaPos offsetFormula;
     @Getter
     private boolean surface = false;
 
-    public abstract Vec randomPositionInShape(Emitter emitter);
-    public Vec getOffset(Emitter emitter) {
+    public abstract Pos randomPositionInShape(Emitter emitter);
+    public Pos getOffset(Emitter emitter) {
         if (offsetFormula != null) {
-            return offsetFormula.getVec(emitter);
+            return offsetFormula.getPos(emitter);
         }
         return offset;
     }
