@@ -47,6 +47,9 @@ public class TestCommand extends Command {
                     ArgumentBoolean attachArg = new ArgumentBoolean("attach_arg");
                     attachArg.setDefaultValue(false);
 
+                    ArgumentBoolean rotateArg = new ArgumentBoolean("rotate_arg");
+                    rotateArg.setDefaultValue(false);
+
                     addSyntax((sender, context) -> {
                         if (sender instanceof Player player) {
                             String emitterName = context.get(emitterArg);
@@ -54,16 +57,18 @@ public class TestCommand extends Command {
                             if (emitterData != null) {
                                 Emitter emitter = new Emitter(player.getInstance(), player.getPosition(), emitterData);
                                 ParticleManager.spawnEmitter(emitter);
-                                if(context.get(attachArg)) {
+                                if(context.get(attachArg))
                                     emitter.setAttachedEntity(player);
-                                }
+                                if(context.get(rotateArg))
+                                    emitter.setRotateAroundPosition(true);
+
                             } else {
                                 sender.sendMessage("Emitter not found: " + emitterName);
                             }
                         } else {
                             sender.sendMessage("This command can only be used by players.");
                         }
-                    }, emitterArg, attachArg);
+                    }, emitterArg, attachArg, rotateArg);
                 }
             });
         }

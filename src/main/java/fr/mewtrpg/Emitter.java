@@ -28,6 +28,8 @@ public final class Emitter implements Tickable, VariablesHolder {
     private final Instance instance;
     private final Pos position;
     @Setter
+    private boolean rotateAroundPosition = false;
+    @Setter
     private Entity attachedEntity;
     private final EmitterData emitterData;
     private final long lifeTime;
@@ -55,9 +57,14 @@ public final class Emitter implements Tickable, VariablesHolder {
             Vec offset = emitterData.shape().getOffset(this);
             Vec particlePosition = emitterData.shape().randomPositionInShape(this).add(getPosition());
             Particle particle = new Particle(emitterData.particleData(), particlePosition);
+            if(rotateAroundPosition)
+                particle.setParticlePosition(rotatePosition(particle.getParticlePosition().asPosition(), getPosition(), getPosition().yaw(), getPosition().pitch()).asVec());
+
             particle.getVariables().put("emitterX", getPosition().x());
             particle.getVariables().put("emitterY", getPosition().y());
             particle.getVariables().put("emitterZ", getPosition().z());
+            particle.getVariables().put("emitterYaw", (double) getPosition().yaw());
+            particle.getVariables().put("emitterPitch", (double) getPosition().pitch());
 
             particle.getVariables().put("offsetX", offset.x());
             particle.getVariables().put("offsetY", offset.y());
@@ -66,6 +73,23 @@ public final class Emitter implements Tickable, VariablesHolder {
             particle.play(Objects.requireNonNull(instance.getChunkAt(getPosition())).getViewersAsAudience(), this );
             particles.add(particle);
         }
+    }
+
+    private Pos rotatePosition(Pos position, Pos center, double yaw, double pitch) {
+        double cosYaw = Math.cos(Math.toRadians(yaw));
+        double sinYaw = Math.sin(Math.toRadians(yaw));
+        double cosPitch = Math.cos(Math.toRadians(pitch));
+        double sinPitch = Math.sin(Math.toRadians(pitch));
+
+        double x = position.x() - center.x();
+        double y = position.y() - center.y();
+        double z = position.z() - center.z();
+
+        double newX = x * cosYaw - z * sinYaw;
+        double newY = y * cosPitch - (x * sinYaw + z * cosYaw) * sinPitch;
+        double newZ = x * sinYaw + z * cosYaw;
+
+        return new Pos(newX + center.x(), newY + center.y(), newZ + center.z());
     }
 
     public void destroy() {

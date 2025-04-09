@@ -3,6 +3,7 @@ package fr.mewtrpg;
 import fr.mewtrpg.particle.ParticleData;
 import fr.mewtrpg.utils.VariablesHolder;
 import lombok.Getter;
+import lombok.Setter;
 import net.kyori.adventure.audience.Audience;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
@@ -23,6 +24,7 @@ public class Particle extends Entity implements VariablesHolder {
     final ParticleData particleData;
     final long lifeTime;
     private Emitter emitter;
+    @Setter
     private Vec particlePosition;
     private Audience audience;
 
