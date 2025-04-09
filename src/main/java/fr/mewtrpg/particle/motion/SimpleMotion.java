@@ -24,7 +24,7 @@ public class SimpleMotion extends Motion {
     public Vec getVelocityVec(Particle particle) {
         Vec direction;
         switch (getMode()) {
-            case INWARD -> direction = particle.getEmitter().getPosition().sub(particle.getParticlePosition()).normalize();
+            case INWARD -> direction = particle.getEmitter().getPosition().sub(particle.getParticlePosition()).asVec().normalize();
             case OUTWARD -> direction = particle.getParticlePosition().sub(particle.getEmitter().getPosition()).normalize();
             case DIRECTION -> direction = this.getDirection().normalize();
             default -> throw new IllegalStateException("Unexpected value: " + getMode());

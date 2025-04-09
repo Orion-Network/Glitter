@@ -10,6 +10,7 @@ import fr.mewtrpg.utils.FormulaVariable;
 import fr.mewtrpg.utils.FormulaVec;
 import fr.mewtrpg.utils.SerializableExpression;
 import net.minestom.server.command.builder.Command;
+import net.minestom.server.command.builder.arguments.ArgumentBoolean;
 import net.minestom.server.command.builder.arguments.ArgumentWord;
 import net.minestom.server.command.builder.suggestion.SuggestionEntry;
 import net.minestom.server.coordinate.Pos;
@@ -43,21 +44,26 @@ public class TestCommand extends Command {
                         }
                     });
 
+                    ArgumentBoolean attachArg = new ArgumentBoolean("attach_arg");
+                    attachArg.setDefaultValue(false);
+
                     addSyntax((sender, context) -> {
                         if (sender instanceof Player player) {
                             String emitterName = context.get(emitterArg);
                             EmitterData emitterData = Samples.samples.get(emitterName);
                             if (emitterData != null) {
-                                Emitter emitter = new Emitter(player.getInstance(), player.getPosition().asVec(), emitterData);
+                                Emitter emitter = new Emitter(player.getInstance(), player.getPosition(), emitterData);
                                 ParticleManager.spawnEmitter(emitter);
-                                //TODO if we add the emitter multiple all will end at same time
+                                if(context.get(attachArg)) {
+                                    emitter.setAttachedEntity(player);
+                                }
                             } else {
                                 sender.sendMessage("Emitter not found: " + emitterName);
                             }
                         } else {
                             sender.sendMessage("This command can only be used by players.");
                         }
-                    }, emitterArg);
+                    }, emitterArg, attachArg);
                 }
             });
         }
