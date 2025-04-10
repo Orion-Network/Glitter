@@ -34,8 +34,10 @@ public class Samples {
         appearance.setBillboardConstraints(AbstractDisplayMeta.BillboardConstraints.FIXED);
         appearance.setSkyLight(15);
         appearance.setBlockLight(15);
-        appearance.setYawn(90);
-        appearance.setPitch(90);
+        appearance.setMinYaw(-180);
+        appearance.setMaxYaw(180);
+        appearance.setMinPitch(-180);
+        appearance.setMaxPitch(180);
         SimpleMotion simpleMotion = new SimpleMotion(SimpleMotion.MotionMode.DIRECTION, 0, new Vec(0, 0, 0), new Vec(0, 0, 0), new MotionScale(0, 2050));
 
         ParticleData particleData = new ParticleData(2300, appearance, simpleMotion);
@@ -50,7 +52,7 @@ public class Samples {
 
         samples.put("loading", new EmitterData(
                 particleData,
-                50,
+                1,
                 new EmitterMode(EmitterType.LOOPING, 10*2050, 50),
                 shape
         ));

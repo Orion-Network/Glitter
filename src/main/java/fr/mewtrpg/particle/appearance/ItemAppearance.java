@@ -4,6 +4,7 @@ import fr.mewtrpg.Particle;
 import lombok.Getter;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.metadata.display.ItemDisplayMeta;
+import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 
@@ -18,6 +19,7 @@ public class ItemAppearance extends Appearance {
         this.material = material;
         this.customModelData = customModelData;
         this.displayContext = displayContext;
+
     }
 
     @Override

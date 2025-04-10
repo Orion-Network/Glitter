@@ -12,7 +12,8 @@ public abstract class Appearance {
     private AbstractDisplayMeta.BillboardConstraints billboardConstraints = AbstractDisplayMeta.BillboardConstraints.CENTER;
     private boolean hasPhysics = false, emissive = false, hasGlow = false;
     private int skyLight = 0, blockLight = 0, glowColor = 0xFFFFFF;
-    private float viewRange = 25, yawn = 0, pitch = 0;
+    private float viewRange = 25, yaw = 0, pitch = 0;
+    private float minYaw = 0, maxYaw = 0, minPitch = 0, maxPitch = 0;
 
     public Appearance(double size) {
         this.size = size;
@@ -21,7 +22,12 @@ public abstract class Appearance {
     public void apply(Particle particle) {
         particle.setNoGravity(true);
         particle.setPhysics(hasPhysics);
-        particle.setParticlePosition(particle.getParticlePosition().withView(yawn, pitch));
+        if(minYaw != 0 && maxYaw != 0)
+            yaw = (float) (Math.random() * (maxYaw - minYaw) + minYaw);
+        if(minPitch != 0 && maxPitch != 0)
+            pitch = (float) (Math.random() * (maxPitch - minPitch) + minPitch);
+
+        particle.setParticlePosition(particle.getParticlePosition().withView(yaw, pitch));
 
         AbstractDisplayMeta displayMeta = (AbstractDisplayMeta) particle.getEntityMeta();
         displayMeta.setPosRotInterpolationDuration(5);
