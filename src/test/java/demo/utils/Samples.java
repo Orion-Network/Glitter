@@ -27,17 +27,14 @@ public class Samples {
         addLoadingEmitter();
         addRainEmitter();
         addFireEmitter();
+        addFunnyFlowerEmitter();
     }
 
     static void addLoadingEmitter() {
-        ItemAppearance appearance = new ItemAppearance( 1, Material.HEART_OF_THE_SEA, 0, ItemDisplayMeta.DisplayContext.HEAD);
+        ItemAppearance appearance = new ItemAppearance( 1, Material.HEART_OF_THE_SEA,  ItemDisplayMeta.DisplayContext.HEAD);
         appearance.setBillboardConstraints(AbstractDisplayMeta.BillboardConstraints.FIXED);
         appearance.setSkyLight(15);
         appearance.setBlockLight(15);
-        appearance.setMinYaw(-180);
-        appearance.setMaxYaw(180);
-        appearance.setMinPitch(-180);
-        appearance.setMaxPitch(180);
         SimpleMotion simpleMotion = new SimpleMotion(SimpleMotion.MotionMode.DIRECTION, 0, new Vec(0, 0, 0), new Vec(0, 0, 0), new MotionScale(0, 2050));
 
         ParticleData particleData = new ParticleData(2300, appearance, simpleMotion);
@@ -59,7 +56,7 @@ public class Samples {
     }
 
     public static void addRainEmitter() {
-        ItemAppearance appearance = new ItemAppearance( 0.5, Material.WIND_CHARGE, 0, ItemDisplayMeta.DisplayContext.FIXED);
+        ItemAppearance appearance = new ItemAppearance( 0.5, Material.WIND_CHARGE, ItemDisplayMeta.DisplayContext.FIXED);
         appearance.setBillboardConstraints(AbstractDisplayMeta.BillboardConstraints.FIXED);
         appearance.setSkyLight(15);
         appearance.setBlockLight(15);
@@ -85,7 +82,7 @@ public class Samples {
     }
 
     public static void addFireEmitter() {
-        ItemAppearance appearance = new ItemAppearance( 0.5, Material.FIRE_CHARGE, 0, ItemDisplayMeta.DisplayContext.FIXED);
+        ItemAppearance appearance = new ItemAppearance( 0.5, Material.FIRE_CHARGE, ItemDisplayMeta.DisplayContext.FIXED);
         appearance.setBillboardConstraints(AbstractDisplayMeta.BillboardConstraints.VERTICAL);
         appearance.setSkyLight(15);
         appearance.setBlockLight(15);
@@ -116,6 +113,28 @@ public class Samples {
                 particleData,
                 50,
                 new EmitterMode(EmitterType.LOOPING, 10*2050, 200),
+                shape
+        ));
+    }
+
+    static void addFunnyFlowerEmitter() {
+        ItemAppearance appearance = new ItemAppearance( 1, Material.HEART_OF_THE_SEA, ItemDisplayMeta.DisplayContext.HEAD);
+        appearance.setBillboardConstraints(AbstractDisplayMeta.BillboardConstraints.FIXED);
+        appearance.setSkyLight(15);
+        appearance.setBlockLight(15);
+        appearance.setMinYaw(-180);
+        appearance.setMaxYaw(180);
+        appearance.setMinPitch(45);
+        appearance.setMaxPitch(90);
+        SimpleMotion simpleMotion = new SimpleMotion(SimpleMotion.MotionMode.DIRECTION, 0, new Vec(0, 0, 0), new Vec(0, 0, 0), new MotionScale(0, 0));
+
+        ParticleData particleData = new ParticleData(5300, appearance, simpleMotion);
+        EmmiterShape shape = new PointShape();
+
+        samples.put("chaos", new EmitterData(
+                particleData,
+                50,
+                new EmitterMode(EmitterType.LOOPING, 2050, 3000),
                 shape
         ));
     }

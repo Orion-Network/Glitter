@@ -14,7 +14,7 @@ import net.minestom.server.network.packet.server.play.DestroyEntitiesPacket;
 import net.minestom.server.network.packet.server.play.EntityMetaDataPacket;
 import net.minestom.server.network.packet.server.play.EntityVelocityPacket;
 import net.minestom.server.network.packet.server.play.SpawnEntityPacket;
-import net.minestom.server.utils.PacketUtils;
+import net.minestom.server.utils.PacketSendingUtils;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -59,8 +59,8 @@ public class Particle extends Entity implements VariablesHolder {
 
         EntityMetaDataPacket fakeMetadataPacket = new EntityMetaDataPacket(START_ENTITY_ID, metadataPacket.entries());
 
-        PacketUtils.sendPacket(audience, fakePacket);
-        PacketUtils.sendPacket(audience, fakeMetadataPacket);
+        PacketSendingUtils.sendPacket(audience, fakePacket);
+        PacketSendingUtils.sendPacket(audience, fakeMetadataPacket);
     }
 
     public void setPhysics(boolean hasPhysics) {

@@ -8,7 +8,7 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.metadata.display.AbstractDisplayMeta;
 import net.minestom.server.network.packet.server.play.EntityMetaDataPacket;
 import net.minestom.server.network.packet.server.play.EntityPositionPacket;
-import net.minestom.server.utils.PacketUtils;
+import net.minestom.server.utils.PacketSendingUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -20,7 +20,7 @@ public abstract class Motion{
 
     public void apply(Particle particle) {
         Vec velocity = getVelocityVec(particle);
-        PacketUtils.sendPacket(particle.getAudience(),
+        PacketSendingUtils.sendPacket(particle.getAudience(),
                 EntityPositionPacket.getPacket(particle.getEntityId(), particle.getPosition().add(velocity), particle.getPosition(), false));
 
         AbstractDisplayMeta displayMeta = (AbstractDisplayMeta) particle.getEntityMeta();
@@ -34,7 +34,7 @@ public abstract class Motion{
             displayMeta.setScale(new Vec(newSize, newSize, newSize));
 
             EntityMetaDataPacket metadataPacket = particle.getMetadataPacket();
-            PacketUtils.sendPacket(particle.getAudience(), new EntityMetaDataPacket(particle.getEntityId(), metadataPacket.entries()));
+            PacketSendingUtils.sendPacket(particle.getAudience(), new EntityMetaDataPacket(particle.getEntityId(), metadataPacket.entries()));
         }
 
     }

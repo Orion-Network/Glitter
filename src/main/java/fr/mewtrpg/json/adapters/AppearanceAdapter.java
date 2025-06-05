@@ -20,9 +20,9 @@ public class AppearanceAdapter implements JsonSerializer<Appearance>, JsonDeseri
         switch (type) {
             case "ItemAppearance" -> {
                 Material material = Material.fromNamespaceId(jsonObject.get("material").getAsString());
-                int customModelData = jsonObject.get("customModelData").getAsInt();
+                String modelId = jsonObject.get("modelId").getAsString();
                 ItemDisplayMeta.DisplayContext displayContext = ItemDisplayMeta.DisplayContext.valueOf(jsonObject.get("displayContext").getAsString());
-                appearance = new ItemAppearance(size, material, customModelData, displayContext);
+                appearance = new ItemAppearance(size, material, modelId, displayContext);
             }
             // Add other appearance types here
             default -> throw new IllegalArgumentException("Unknown appearance type: " + type);
@@ -57,7 +57,7 @@ public class AppearanceAdapter implements JsonSerializer<Appearance>, JsonDeseri
             case "ItemAppearance" -> {
                 ItemAppearance itemAppearance = (ItemAppearance) src;
                 jsonObject.addProperty("material", itemAppearance.getMaterial().namespace().asString());
-                jsonObject.addProperty("customModelData", itemAppearance.getCustomModelData());
+                jsonObject.addProperty("modelId", itemAppearance.getModelId());
                 jsonObject.addProperty("displayContext", itemAppearance.getDisplayContext().name());
             }
             // Add other appearance types here

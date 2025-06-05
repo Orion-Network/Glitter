@@ -17,7 +17,7 @@ public class ParticleSerializationTest {
     Gson gson = ParticleGson.GSON;
     @Test
     public void testSimpleParticleSerialization() {
-        ItemAppearance appearance = new ItemAppearance(1, Material.OAK_BOAT, 0, ItemDisplayMeta.DisplayContext.GROUND);
+        ItemAppearance appearance = new ItemAppearance(1, Material.OAK_BOAT, "minecraft:beacon", ItemDisplayMeta.DisplayContext.GROUND);
         SimpleMotion motion = new SimpleMotion(
                 SimpleMotion.MotionMode.OUTWARD,
                 1, new Vec(0,0,0), new Vec(0, 0, 0),
@@ -32,7 +32,7 @@ public class ParticleSerializationTest {
 
     @Test
     public void testFormulaParticleSerialization() {
-        ItemAppearance appearance = new ItemAppearance( 1, Material.BEACON, 0, ItemDisplayMeta.DisplayContext.GROUND);
+        ItemAppearance appearance = new ItemAppearance( 1, Material.BEACON, "minecraft:beacon", ItemDisplayMeta.DisplayContext.GROUND);
         appearance.setBillboardConstraints(AbstractDisplayMeta.BillboardConstraints.FIXED);
         appearance.setSkyLight(15);
         appearance.setBlockLight(15);

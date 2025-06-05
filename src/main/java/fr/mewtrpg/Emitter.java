@@ -15,7 +15,7 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.network.packet.server.play.DestroyEntitiesPacket;
-import net.minestom.server.utils.PacketUtils;
+import net.minestom.server.utils.PacketSendingUtils;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -98,7 +98,7 @@ public final class Emitter implements Tickable, VariablesHolder {
     public void destroy() {
         scheduler.shutdownNow();
         particles.forEach(particle ->
-                PacketUtils.sendPacket(particle.getAudience(), new DestroyEntitiesPacket(particle.getEntityId())));
+                PacketSendingUtils.sendPacket(particle.getAudience(), new DestroyEntitiesPacket(particle.getEntityId())));
         particles.clear();
     }
 
@@ -111,7 +111,7 @@ public final class Emitter implements Tickable, VariablesHolder {
 
         particles.removeIf(particle -> {
             if (System.currentTimeMillis() > particle.getLifeTime()) {
-                PacketUtils.sendPacket(particle.getAudience(), new DestroyEntitiesPacket(particle.getEntityId()));
+                PacketSendingUtils.sendPacket(particle.getAudience(), new DestroyEntitiesPacket(particle.getEntityId()));
                 return true;
             }
             particle.tick(l);

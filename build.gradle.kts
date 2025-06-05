@@ -13,7 +13,7 @@ dependencies {
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
 
-    implementation("net.minestom:minestom-snapshots:bb7acc2e77")
+    implementation("net.minestom:minestom-snapshots:1_21_4-44b34717ed")
 
     implementation("org.projectlombok:lombok:1.18.34")
 
