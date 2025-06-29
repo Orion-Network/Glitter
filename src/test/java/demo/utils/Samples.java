@@ -8,11 +8,13 @@ import fr.mewtrpg.emitter.shape.EmmiterShape;
 import fr.mewtrpg.emitter.shape.PointShape;
 import fr.mewtrpg.particle.ParticleData;
 import fr.mewtrpg.particle.appearance.ItemAppearance;
+import fr.mewtrpg.particle.appearance.TextAppearance;
 import fr.mewtrpg.particle.motion.*;
 import fr.mewtrpg.utils.formula.FormulaPos;
 import fr.mewtrpg.utils.formula.FormulaVariable;
 import fr.mewtrpg.utils.formula.FormulaVec;
 import fr.mewtrpg.utils.SerializableExpression;
+import net.kyori.adventure.text.Component;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.metadata.display.AbstractDisplayMeta;
 import net.minestom.server.entity.metadata.display.ItemDisplayMeta;
@@ -28,6 +30,7 @@ public class Samples {
         addRainEmitter();
         addFireEmitter();
         addFunnyFlowerEmitter();
+        addTextFlower();
     }
 
     static void addLoadingEmitter() {
@@ -132,6 +135,28 @@ public class Samples {
         EmmiterShape shape = new PointShape();
 
         samples.put("chaos", new EmitterData(
+                particleData,
+                50,
+                new EmitterMode(EmitterType.LOOPING, 2050, 3000),
+                shape
+        ));
+    }
+
+    static void addTextFlower() {
+        TextAppearance appearance = new TextAppearance( 1, Component.text("Flower"));
+        appearance.setBillboardConstraints(AbstractDisplayMeta.BillboardConstraints.HORIZONTAL);
+        appearance.setSkyLight(15);
+        appearance.setBlockLight(15);
+        appearance.setMinYaw(-180);
+        appearance.setMaxYaw(180);
+        appearance.setMinPitch(45);
+        appearance.setMaxPitch(90);
+        SimpleMotion simpleMotion = new SimpleMotion(SimpleMotion.MotionMode.DIRECTION, 0, new Vec(0, 0, 0), new Vec(0, 0, 0), new MotionScale(0, 0));
+
+        ParticleData particleData = new ParticleData(5300, appearance, simpleMotion);
+        EmmiterShape shape = new PointShape();
+
+        samples.put("text", new EmitterData(
                 particleData,
                 50,
                 new EmitterMode(EmitterType.LOOPING, 2050, 3000),
