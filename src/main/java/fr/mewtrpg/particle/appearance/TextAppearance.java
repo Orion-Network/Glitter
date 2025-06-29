@@ -1,10 +1,12 @@
 package fr.mewtrpg.particle.appearance;
 
 import fr.mewtrpg.Particle;
+import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.metadata.display.TextDisplayMeta;
 
+@Getter
 public class TextAppearance extends Appearance {
     Component text;
     public TextAppearance(double size, Component component) {

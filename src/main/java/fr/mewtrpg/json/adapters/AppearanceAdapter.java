@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializer;
 import fr.mewtrpg.particle.appearance.Appearance;
 import fr.mewtrpg.particle.appearance.ItemAppearance;
+import fr.mewtrpg.particle.appearance.TextAppearance;
 import net.minestom.server.entity.metadata.display.AbstractDisplayMeta;
 import net.minestom.server.entity.metadata.display.ItemDisplayMeta;
 import net.minestom.server.item.Material;
@@ -60,7 +61,10 @@ public class AppearanceAdapter implements JsonSerializer<Appearance>, JsonDeseri
                 jsonObject.addProperty("modelId", itemAppearance.getModelId());
                 jsonObject.addProperty("displayContext", itemAppearance.getDisplayContext().name());
             }
-            // Add other appearance types here
+            case "TextAppearance" -> {
+                TextAppearance textAppearance = (TextAppearance) src;
+                jsonObject.add("text", context.serialize(textAppearance.getText()));
+            }
         }
 
         return jsonObject;
