@@ -1,8 +1,7 @@
 import com.google.gson.Gson;
-import fr.mewtrpg.Emitter;
 import fr.mewtrpg.emitter.EmitterData;
-import fr.mewtrpg.emitter.EmitterMode;
 import fr.mewtrpg.emitter.EmitterType;
+import fr.mewtrpg.emitter.mode.LoopingEmitterMode;
 import fr.mewtrpg.emitter.shape.SphereShape;
 import fr.mewtrpg.json.ParticleGson;
 import fr.mewtrpg.particle.ParticleData;
@@ -28,7 +27,7 @@ public class EmitterSerializationTest {
                 new MotionScale(0, 0));
         ParticleData particleData = new ParticleData(1000, appearance, motion);
 
-        EmitterData emitterData = new EmitterData(particleData, 10, new EmitterMode(EmitterType.LOOPING, 10, 10), new SphereShape(5));
+        EmitterData emitterData = new EmitterData(particleData, 10, new LoopingEmitterMode( 10, 10), new SphereShape(5));
 
         String json = gson.toJson(emitterData);
         EmitterData deserializedEmitterData = gson.fromJson(json, EmitterData.class);

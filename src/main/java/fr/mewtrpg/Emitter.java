@@ -1,8 +1,10 @@
 package fr.mewtrpg;
 
 import fr.mewtrpg.emitter.EmitterData;
-import fr.mewtrpg.emitter.EmitterMode;
 import fr.mewtrpg.emitter.EmitterType;
+import fr.mewtrpg.emitter.mode.EmitterMode;
+import fr.mewtrpg.emitter.mode.LoopingEmitterMode;
+import fr.mewtrpg.emitter.mode.OnceEmitterMode;
 import fr.mewtrpg.emitter.shape.EmmiterShape;
 import fr.mewtrpg.particle.ParticleData;
 import fr.mewtrpg.utils.VariablesHolder;
@@ -11,7 +13,6 @@ import lombok.Setter;
 import net.kyori.adventure.audience.Audience;
 import net.minestom.server.Tickable;
 import net.minestom.server.coordinate.Pos;
-import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.network.packet.server.play.DestroyEntitiesPacket;
@@ -44,7 +45,10 @@ public final class Emitter implements Tickable, VariablesHolder {
         this.instance = instance;
         this.position = position;
         this.emitterData = emitterData;
-        this.lifeTime = emitterData.mode().getLifeTime() + System.currentTimeMillis();
+        if(emitterData.mode() instanceof LoopingEmitterMode)
+            this.lifeTime = emitterData.mode().lifeTime() + System.currentTimeMillis();
+        else
+            this.lifeTime = emitterData.particleData().lifeTime() + System.currentTimeMillis();
     }
 
     public Emitter(Instance instance, Pos position, ParticleData particleData, int amount, EmitterMode mode, EmmiterShape shape) {
@@ -104,7 +108,7 @@ public final class Emitter implements Tickable, VariablesHolder {
 
     @Override
     public void tick(long l) {
-        if (lastExecution + emitterData.mode().getDelay() < System.currentTimeMillis()) {
+        if (emitterData.mode().delay() < System.currentTimeMillis() - lastExecution) {
             emit();
             lastExecution = System.currentTimeMillis();
         }
@@ -120,7 +124,7 @@ public final class Emitter implements Tickable, VariablesHolder {
     }
 
     public boolean isDead() {
-        return (emitterData.mode().getType() == EmitterType.LOOPING && System.currentTimeMillis() > this.getLifeTime());
+        return (System.currentTimeMillis() > this.getLifeTime());
     }
 
     public Instance getInstance() {

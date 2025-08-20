@@ -1,7 +1,8 @@
 package fr.mewtrpg;
 
-import fr.mewtrpg.emitter.EmitterMode;
 import fr.mewtrpg.emitter.EmitterType;
+import fr.mewtrpg.emitter.mode.EmitterMode;
+import fr.mewtrpg.emitter.mode.LoopingEmitterMode;
 import fr.mewtrpg.emitter.shape.EmmiterShape;
 import fr.mewtrpg.emitter.shape.SphereShape;
 import fr.mewtrpg.particle.*;
@@ -43,7 +44,7 @@ public class ParticleManager implements Runnable {
                 instance,
                 particle.getParticlePosition(),
                 particle.getParticleData(), 1,
-                new EmitterMode(EmitterType.LOOPING, particle.getLifeTime()-System.currentTimeMillis(), particle.getLifeTime()-System.currentTimeMillis()+10),
+                new LoopingEmitterMode(particle.getLifeTime()-System.currentTimeMillis(), particle.getLifeTime()-System.currentTimeMillis()+10),
                 new SphereShape(0)
         );
         spawnEmitter(emitter);

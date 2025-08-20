@@ -1,5 +1,6 @@
 package fr.mewtrpg.emitter;
 
+import fr.mewtrpg.emitter.mode.EmitterMode;
 import fr.mewtrpg.emitter.shape.EmmiterShape;
 import fr.mewtrpg.particle.ParticleData;
 

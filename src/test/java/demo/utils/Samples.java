@@ -1,8 +1,10 @@
 package demo.utils;
 
 import fr.mewtrpg.emitter.EmitterData;
-import fr.mewtrpg.emitter.EmitterMode;
 import fr.mewtrpg.emitter.EmitterType;
+import fr.mewtrpg.emitter.mode.EmitterMode;
+import fr.mewtrpg.emitter.mode.LoopingEmitterMode;
+import fr.mewtrpg.emitter.mode.OnceEmitterMode;
 import fr.mewtrpg.emitter.shape.BoxShape;
 import fr.mewtrpg.emitter.shape.EmmiterShape;
 import fr.mewtrpg.emitter.shape.PointShape;
@@ -53,7 +55,7 @@ public class Samples {
         samples.put("loading", new EmitterData(
                 particleData,
                 1,
-                new EmitterMode(EmitterType.LOOPING, 10*2050, 50),
+                new LoopingEmitterMode(10*2050, 50),
                 shape
         ));
     }
@@ -79,7 +81,7 @@ public class Samples {
         samples.put("rain", new EmitterData(
                 particleData,
                 50,
-                new EmitterMode(EmitterType.LOOPING, 10*2050, 200),
+                new LoopingEmitterMode(10*2050, 200),
                 shape
         ));
     }
@@ -115,7 +117,7 @@ public class Samples {
         samples.put("fire", new EmitterData(
                 particleData,
                 50,
-                new EmitterMode(EmitterType.LOOPING, 10*2050, 200),
+                new OnceEmitterMode(),
                 shape
         ));
     }
@@ -137,7 +139,7 @@ public class Samples {
         samples.put("chaos", new EmitterData(
                 particleData,
                 50,
-                new EmitterMode(EmitterType.LOOPING, 2050, 3000),
+                new OnceEmitterMode(),
                 shape
         ));
     }
@@ -159,7 +161,7 @@ public class Samples {
         samples.put("text", new EmitterData(
                 particleData,
                 50,
-                new EmitterMode(EmitterType.LOOPING, 2050, 3000),
+                new LoopingEmitterMode( 2050, 3000),
                 shape
         ));
     }
