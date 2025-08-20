@@ -2,6 +2,7 @@ package fr.mewtrpg.json;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import fr.mewtrpg.emitter.mode.EmitterMode;
 import fr.mewtrpg.emitter.shape.EmmiterShape;
 import fr.mewtrpg.json.adapters.*;
 import fr.mewtrpg.particle.appearance.Appearance;
@@ -15,6 +16,7 @@ public class ParticleGson {
         builder.registerTypeAdapter(Motion.class, new MotionAdapter());
         builder.registerTypeAdapter(Appearance.class, new AppearanceAdapter());
         builder.registerTypeAdapter(EmmiterShape.class, new ParticleShapeAdapter());
+        builder.registerTypeAdapter(EmitterMode.class, new EmitterModeAdapter());
         GSON = builder.create();
     }
 }

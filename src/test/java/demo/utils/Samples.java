@@ -1,8 +1,6 @@
 package demo.utils;
 
 import fr.mewtrpg.emitter.EmitterData;
-import fr.mewtrpg.emitter.EmitterType;
-import fr.mewtrpg.emitter.mode.EmitterMode;
 import fr.mewtrpg.emitter.mode.LoopingEmitterMode;
 import fr.mewtrpg.emitter.mode.OnceEmitterMode;
 import fr.mewtrpg.emitter.shape.BoxShape;

@@ -1,7 +1,7 @@
 import com.google.gson.Gson;
 import fr.mewtrpg.emitter.EmitterData;
-import fr.mewtrpg.emitter.EmitterType;
 import fr.mewtrpg.emitter.mode.LoopingEmitterMode;
+import fr.mewtrpg.emitter.mode.OnceEmitterMode;
 import fr.mewtrpg.emitter.shape.SphereShape;
 import fr.mewtrpg.json.ParticleGson;
 import fr.mewtrpg.particle.ParticleData;
@@ -17,6 +17,21 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class EmitterSerializationTest {
     Gson gson = ParticleGson.GSON;
+
+    @Test
+    public void testEmitterModeSerialization() {
+        LoopingEmitterMode loopingMode = new LoopingEmitterMode(1000, 2000);
+        String json = gson.toJson(loopingMode);
+        LoopingEmitterMode deserializedMode = gson.fromJson(json, LoopingEmitterMode.class);
+        String deserializedJson = gson.toJson(deserializedMode);
+        assertEquals(json, deserializedJson, "Serialized and deserialized JSON should be equal");
+
+        OnceEmitterMode onceMode = new OnceEmitterMode();
+        json = gson.toJson(onceMode);
+        OnceEmitterMode deserializedOnceMode = gson.fromJson(json, OnceEmitterMode.class);
+        String deserializedOnceJson = gson.toJson(deserializedOnceMode);
+        assertEquals(json, deserializedOnceJson, "Serialized and deserialized JSON should be equal");
+    }
 
     @Test
     public void testEmitterSerialization() {

@@ -1,6 +1,5 @@
 package fr.mewtrpg;
 
-import fr.mewtrpg.emitter.EmitterType;
 import fr.mewtrpg.emitter.mode.EmitterMode;
 import fr.mewtrpg.emitter.mode.LoopingEmitterMode;
 import fr.mewtrpg.emitter.shape.EmmiterShape;
