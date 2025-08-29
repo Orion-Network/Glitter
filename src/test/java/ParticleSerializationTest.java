@@ -11,13 +11,17 @@ import net.minestom.server.entity.metadata.display.AbstractDisplayMeta;
 import net.minestom.server.entity.metadata.display.ItemDisplayMeta;
 import net.minestom.server.item.Material;
 import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ParticleSerializationTest {
     Gson gson = ParticleGson.GSON;
     @Test
     public void testSimpleParticleSerialization() {
-        ItemAppearance appearance = new ItemAppearance(1, Material.OAK_BOAT, "minecraft:beacon", ItemDisplayMeta.DisplayContext.GROUND);
+        ItemAppearance appearance = new ItemAppearance(1, Material.OAK_BOAT, "minecraft:beacon", ItemAppearance.CustomModelData.builder().build(), ItemDisplayMeta.DisplayContext.GROUND);
         SimpleMotion motion = new SimpleMotion(
                 SimpleMotion.MotionMode.OUTWARD,
                 1, new Vec(0,0,0), new Vec(0, 0, 0),
@@ -32,7 +36,7 @@ public class ParticleSerializationTest {
 
     @Test
     public void testFormulaParticleSerialization() {
-        ItemAppearance appearance = new ItemAppearance( 1, Material.BEACON, "minecraft:beacon", ItemDisplayMeta.DisplayContext.GROUND);
+        ItemAppearance appearance = new ItemAppearance( 1, Material.BEACON, "minecraft:beacon",ItemAppearance.CustomModelData.builder().stringList(new ArrayList<>(List.of("test"))).build(), ItemDisplayMeta.DisplayContext.GROUND);
         appearance.setBillboardConstraints(AbstractDisplayMeta.BillboardConstraints.FIXED);
         appearance.setSkyLight(15);
         appearance.setBlockLight(15);
@@ -60,6 +64,7 @@ public class ParticleSerializationTest {
         ParticleData particleData = new ParticleData(300, appearance, motion);
 
         String json = gson.toJson(particleData);
+        System.out.println(json);
         ParticleData deserializedParticleData = gson.fromJson(json, ParticleData.class);
         String deserializedJson = gson.toJson(deserializedParticleData);
         assertEquals(json, deserializedJson, "Serialized and deserialized JSON should be equal");

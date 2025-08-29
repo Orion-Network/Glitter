@@ -35,7 +35,7 @@ public class EmitterSerializationTest {
 
     @Test
     public void testEmitterSerialization() {
-        ItemAppearance appearance = new ItemAppearance(1, Material.OAK_BOAT, "minecraft:beacon", ItemDisplayMeta.DisplayContext.GROUND);
+        ItemAppearance appearance = new ItemAppearance(1, Material.OAK_BOAT, "minecraft:beacon", ItemAppearance.CustomModelData.builder().build(), ItemDisplayMeta.DisplayContext.GROUND);
         SimpleMotion motion = new SimpleMotion(
                 SimpleMotion.MotionMode.OUTWARD,
                 1, new Vec(0,0,0), new Vec(0, 0, 0),
