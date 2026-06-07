@@ -50,12 +50,12 @@ public class Particle extends Entity implements VariablesHolder {
         this.audience = audience;
         this.emitter = emitter;
 
-        SpawnEntityPacket packet = (SpawnEntityPacket) this.getEntityType().registry().spawnType().getSpawnPacket(this);
+        SpawnEntityPacket packet = this.getSpawnPacket();
         EntityMetaDataPacket metadataPacket = this.getMetadataPacket();
 
         int START_ENTITY_ID = this.getEntityId();
         SpawnEntityPacket fakePacket = new SpawnEntityPacket(START_ENTITY_ID, UUID.randomUUID(), packet.type(),
-                particlePosition, packet.headRot(), packet.data(), (short) 0, (short) 10, (short) 0);
+                particlePosition, packet.headRot(), packet.data(), new Vec(0, 10 / 8000.0, 0));
 
         EntityMetaDataPacket fakeMetadataPacket = new EntityMetaDataPacket(START_ENTITY_ID, metadataPacket.entries());
 

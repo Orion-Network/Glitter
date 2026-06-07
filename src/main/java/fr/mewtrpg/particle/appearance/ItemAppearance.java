@@ -6,7 +6,6 @@ import lombok.Getter;
 import net.kyori.adventure.util.RGBLike;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.metadata.display.ItemDisplayMeta;
-import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 
@@ -29,14 +28,20 @@ public class ItemAppearance extends Appearance {
     }
 
     public ItemAppearance(double size, Material material, ItemDisplayMeta.DisplayContext context) {
-        this(size, material, material.namespace().asString(), CustomModelData.builder().build(), context);
+        this(size, material, material.key().asString(), CustomModelData.builder().build(), context);
     }
 
     @Override
     public void apply(Particle particle) {
         particle.switchEntityType(EntityType.ITEM_DISPLAY);
         ItemDisplayMeta itemDisplayMeta = (ItemDisplayMeta) particle.getEntityMeta();
-        itemDisplayMeta.setItemStack(ItemStack.of(material, 1).withItemModel(modelId).withCustomModelData(customModelData.floatList, customModelData.booleansList, customModelData.stringList, customModelData.colorsList));
+        itemDisplayMeta.setItemStack(ItemStack.of(material, 1)
+                .withItemModel(modelId)
+                .withCustomModelData(
+                        customModelData.floats(),
+                        customModelData.flags(),
+                        customModelData.strings(),
+                        customModelData.colors()));
         itemDisplayMeta.setDisplayContext(displayContext);
 
         super.apply(particle);
@@ -44,10 +49,29 @@ public class ItemAppearance extends Appearance {
 
     @Builder
     public static class CustomModelData {
-        ArrayList<Float> floatList;
-        ArrayList<Boolean> booleansList;
-        ArrayList<String> stringList;
-        ArrayList<RGBLike> colorsList;
+        @Builder.Default
+        ArrayList<Float> floatList = new ArrayList<>();
+        @Builder.Default
+        ArrayList<Boolean> booleansList = new ArrayList<>();
+        @Builder.Default
+        ArrayList<String> stringList = new ArrayList<>();
+        @Builder.Default
+        ArrayList<RGBLike> colorsList = new ArrayList<>();
 
+        private List<Float> floats() {
+            return floatList != null ? floatList : List.of();
+        }
+
+        private List<Boolean> flags() {
+            return booleansList != null ? booleansList : List.of();
+        }
+
+        private List<String> strings() {
+            return stringList != null ? stringList : List.of();
+        }
+
+        private List<RGBLike> colors() {
+            return colorsList != null ? colorsList : List.of();
+        }
     }
 }
