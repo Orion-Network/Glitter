@@ -129,6 +129,8 @@ Then you can make your own particle/emitter, you can use examples from the demo 
 
 _For more examples, please refer to the [Documentation](https://example.com)_
 
+Ideas for moving particle work to the GPU with core shaders (in French): [docs/shaders.md](docs/shaders.md)
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
