@@ -8,13 +8,14 @@ import fr.mewtrpg.particle.ParticleData;
 import fr.mewtrpg.utils.VariablesHolder;
 import lombok.Getter;
 import lombok.Setter;
-import net.kyori.adventure.audience.Audience;
 import net.minestom.server.Tickable;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.Player;
+import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.play.DestroyEntitiesPacket;
-import net.minestom.server.utils.PacketSendingUtils;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -23,7 +24,8 @@ import java.util.concurrent.*;
 public final class Emitter implements Tickable, VariablesHolder {
 
     private final ConcurrentLinkedQueue<Particle> particles = new ConcurrentLinkedQueue<>();
-    private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+    /** Joueurs qui voient les particules : ceux qui voient le chunk, tenus a jour a chaque tick. */
+    private final Set<Player> viewers = ConcurrentHashMap.newKeySet();
 
     private final Instance instance;
     private final Pos position;
@@ -33,6 +35,7 @@ public final class Emitter implements Tickable, VariablesHolder {
     private Entity attachedEntity;
     private final EmitterData emitterData;
     private final long lifeTime;
+    private volatile boolean killed;
 
     private final UUID uuid = UUID.randomUUID();
     private final HashMap<String, Double> variables = new HashMap<>();
@@ -55,6 +58,7 @@ public final class Emitter implements Tickable, VariablesHolder {
 
 
     public void emit() {
+        refreshViewers();
         variables.put("time", (System.currentTimeMillis() - creationTime) / 1000.0);
         for (int i = 0; i < emitterData.amount(); i++) {
             Pos offset = emitterData.shape().getOffset(this);
@@ -73,11 +77,33 @@ public final class Emitter implements Tickable, VariablesHolder {
             particle.getVariables().put("offsetY", offset.y());
             particle.getVariables().put("offsetZ", offset.z());
 
-            Audience audience = Objects.requireNonNull(instance.getChunkAt(getPosition())).getViewersAsAudience();
-
-            particle.play(audience, this );
+            particle.play(this);
             particles.add(particle);
         }
+    }
+
+    /**
+     * Suit les joueurs qui voient le chunk de l'emetteur. Un joueur arrive apres l'apparition des particules (une
+     * orbite qui dure tout un combat, par exemple) les recoit telles qu'elles sont a ce moment.
+     */
+    private void refreshViewers() {
+        Instance current = getInstance();
+        Chunk chunk = current == null ? null : current.getChunkAt(getPosition());
+        if (chunk == null) {
+            return;
+        }
+        Set<Player> now = chunk.getViewers();
+        viewers.retainAll(now);
+        for (Player player : now) {
+            if (viewers.add(player)) {
+                particles.forEach(particle -> particle.show(player));
+            }
+        }
+    }
+
+    /** Envoie un paquet a tous ceux qui voient les particules de cet emetteur. */
+    public void send(SendablePacket packet) {
+        viewers.forEach(player -> player.sendPacket(packet));
     }
 
     private Pos rotatePosition(Pos position, Pos center, double yaw, double pitch) {
@@ -98,14 +124,18 @@ public final class Emitter implements Tickable, VariablesHolder {
     }
 
     public void destroy() {
-        scheduler.shutdownNow();
-        particles.forEach(particle ->
-                PacketSendingUtils.sendPacket(particle.getAudience(), new DestroyEntitiesPacket(particle.getEntityId())));
+        particles.forEach(particle -> send(new DestroyEntitiesPacket(particle.getEntityId())));
         particles.clear();
+    }
+
+    /** Arrete l'emetteur avant la fin de sa duree : ses particules disparaissent au prochain tick du gestionnaire. */
+    public void kill() {
+        killed = true;
     }
 
     @Override
     public void tick(long l) {
+        refreshViewers();
         if (emitterData.mode().delay() < System.currentTimeMillis() - lastExecution) {
             emit();
             lastExecution = System.currentTimeMillis();
@@ -113,7 +143,7 @@ public final class Emitter implements Tickable, VariablesHolder {
 
         particles.removeIf(particle -> {
             if (System.currentTimeMillis() > particle.getLifeTime()) {
-                PacketSendingUtils.sendPacket(particle.getAudience(), new DestroyEntitiesPacket(particle.getEntityId()));
+                send(new DestroyEntitiesPacket(particle.getEntityId()));
                 return true;
             }
             particle.tick(l);
@@ -122,7 +152,7 @@ public final class Emitter implements Tickable, VariablesHolder {
     }
 
     public boolean isDead() {
-        return (System.currentTimeMillis() > this.getLifeTime());
+        return killed || (System.currentTimeMillis() > this.getLifeTime());
     }
 
     public Instance getInstance() {

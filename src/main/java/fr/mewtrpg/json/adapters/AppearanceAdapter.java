@@ -20,7 +20,7 @@ public class AppearanceAdapter implements JsonSerializer<Appearance>, JsonDeseri
 
         switch (type) {
             case "ItemAppearance" -> {
-                Material material = Material.fromNamespaceId(jsonObject.get("material").getAsString());
+                Material material = Material.fromKey(jsonObject.get("material").getAsString());
                 String modelId = jsonObject.get("modelId").getAsString();
                 ItemAppearance.CustomModelData customModelData = context.deserialize(jsonObject.get("customModelData"), ItemAppearance.CustomModelData.class);
                 ItemDisplayMeta.DisplayContext displayContext = ItemDisplayMeta.DisplayContext.valueOf(jsonObject.get("displayContext").getAsString());
@@ -58,7 +58,7 @@ public class AppearanceAdapter implements JsonSerializer<Appearance>, JsonDeseri
         switch (src.getClass().getSimpleName()) {
             case "ItemAppearance" -> {
                 ItemAppearance itemAppearance = (ItemAppearance) src;
-                jsonObject.addProperty("material", itemAppearance.getMaterial().namespace().asString());
+                jsonObject.addProperty("material", itemAppearance.getMaterial().key().asString());
                 jsonObject.addProperty("modelId", itemAppearance.getModelId());
                 jsonObject.add("customModelData", context.serialize(itemAppearance.getCustomModelData()));
                 jsonObject.addProperty("displayContext", itemAppearance.getDisplayContext().name());

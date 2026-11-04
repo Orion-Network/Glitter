@@ -6,6 +6,7 @@
       <GradleProjectSettings>
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="gradleHome" value="" />
+        <option name="gradleJvm" value="/opt/intellij-idea-ultimate-edition/jbr" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />

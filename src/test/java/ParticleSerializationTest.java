@@ -3,6 +3,7 @@ import fr.mewtrpg.json.ParticleGson;
 import fr.mewtrpg.particle.ParticleData;
 import fr.mewtrpg.particle.appearance.ItemAppearance;
 import fr.mewtrpg.particle.motion.*;
+import fr.mewtrpg.utils.formula.FormulaPos;
 import fr.mewtrpg.utils.formula.FormulaVariable;
 import fr.mewtrpg.utils.formula.FormulaVec;
 import fr.mewtrpg.utils.SerializableExpression;
@@ -70,5 +71,28 @@ public class ParticleSerializationTest {
         assertEquals(json, deserializedJson, "Serialized and deserialized JSON should be equal");
 
 
+    }
+
+    @Test
+    public void testAnchoredParticleSerialization() {
+        ItemAppearance appearance = new ItemAppearance(0.6, Material.ARROW, ItemDisplayMeta.DisplayContext.FIXED);
+        appearance.setScale(new Vec(0.6, 0.6, 1.2));
+        AnchoredMotion motion = new AnchoredMotion(
+                new FormulaPos(
+                        new SerializableExpression("sin(time*2)*1.5", "time"),
+                        new SerializableExpression("1.2"),
+                        new SerializableExpression("cos(time*2)*1.5", "time")),
+                new MotionScale(0, 0, 0, new Vec(0, 0, 0)));
+        ParticleData particleData = new ParticleData(30000, appearance, motion);
+
+        String json = gson.toJson(particleData);
+        String again = gson.toJson(gson.fromJson(json, ParticleData.class));
+        assertEquals(json, again, "Serialized and deserialized JSON should be equal");
+    }
+
+    @Test
+    public void aScaleVectorReplacesTheUniformSize() {
+        assertEquals(new Vec(2, 2, 2), new MotionScale(2, 100).target());
+        assertEquals(new Vec(2.5, 1, 30), new MotionScale(2, 100, 0, new Vec(2.5, 1, 30)).target());
     }
 }

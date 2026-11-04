@@ -4,6 +4,7 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializer;
 import fr.mewtrpg.particle.motion.*;
+import fr.mewtrpg.utils.formula.FormulaPos;
 import fr.mewtrpg.utils.formula.FormulaVec;
 import net.minestom.server.coordinate.Vec;
 
@@ -25,6 +26,10 @@ public class MotionAdapter implements JsonSerializer<Motion>, JsonDeserializer<M
                     context.deserialize(jsonObject.get("direction"), FormulaVec.class),
                     context.deserialize(jsonObject.get("velocity"), FormulaVec.class),
                     context.deserialize(jsonObject.get("scale"), FormulaMotionScale.class)
+            );
+            case "AnchoredMotion" -> motion = new AnchoredMotion(
+                    context.deserialize(jsonObject.get("offset"), FormulaPos.class),
+                    context.deserialize(jsonObject.get("scale"), MotionScale.class)
             );
             default -> throw new IllegalStateException("Unexpected value: " + type);
         }
@@ -50,6 +55,11 @@ public class MotionAdapter implements JsonSerializer<Motion>, JsonDeserializer<M
                 jsonObject.add("direction", context.serialize(formulaMotion.getDirectionFormula()));
                 jsonObject.add("velocity", context.serialize(formulaMotion.getVelocityFormula()));
                 jsonObject.add("scale", context.serialize(formulaMotion.getScale()));
+            }
+            case "AnchoredMotion" -> {
+                AnchoredMotion anchoredMotion = (AnchoredMotion) src;
+                jsonObject.add("offset", context.serialize(anchoredMotion.getOffset()));
+                jsonObject.add("scale", context.serialize(anchoredMotion.getScale()));
             }
         }
         return jsonObject;

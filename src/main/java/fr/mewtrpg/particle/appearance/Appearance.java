@@ -14,6 +14,8 @@ public abstract class Appearance {
     private int skyLight = 0, blockLight = 0, glowColor = 0xFFFFFF;
     private float viewRange = 25, yaw = 0, pitch = 0;
     private float minYaw = 0, maxYaw = 0, minPitch = 0, maxPitch = 0;
+    /** Taille par axe ; nulle, la particule prend {@link #size} sur les trois. */
+    private Vec scale;
 
     public Appearance(double size) {
         this.size = size;
@@ -31,12 +33,14 @@ public abstract class Appearance {
 
         AbstractDisplayMeta displayMeta = (AbstractDisplayMeta) particle.getEntityMeta();
         displayMeta.setPosRotInterpolationDuration(5);
-        displayMeta.setTransformationInterpolationDuration(50);
-        displayMeta.setScale(new Vec(size, size, size));
+        displayMeta.setTransformationInterpolationDuration(0);
+        displayMeta.setScale(scale != null ? scale : new Vec(size, size, size));
         displayMeta.setBillboardRenderConstraints(billboardConstraints);
+        // Emissive l'emporte : la ligne suivante l'ecrasait, et l'option ne faisait rien.
         if(emissive)
             displayMeta.setBrightnessOverride((0xF) << 4 | (0xF) << 20);
-        displayMeta.setBrightnessOverride((blockLight & 0xF) << 4 | (skyLight & 0xF) << 20);
+        else
+            displayMeta.setBrightnessOverride((blockLight & 0xF) << 4 | (skyLight & 0xF) << 20);
 
         displayMeta.setViewRange(viewRange);
 
