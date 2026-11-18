@@ -3,7 +3,7 @@ plugins {
 }
 
 group = "fr.mewtrpg"
-version = "1.0-1.21.11"
+version = "1.0-26.2"
 
 java {
     toolchain {
@@ -20,7 +20,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
-    implementation("net.minestom:minestom:2026.04.13-1.21.11")
+    implementation("net.minestom:minestom:2026.10.07-26.2")
 
     implementation("org.projectlombok:lombok:1.18.46")
 

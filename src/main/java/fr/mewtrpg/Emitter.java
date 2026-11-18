@@ -92,7 +92,7 @@ public final class Emitter implements Tickable, VariablesHolder {
         if (chunk == null) {
             return;
         }
-        Set<Player> now = chunk.getViewers();
+        Set<? extends Player> now = chunk.getViewers();
         viewers.retainAll(now);
         for (Player player : now) {
             if (viewers.add(player)) {

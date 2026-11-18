@@ -30,7 +30,7 @@ public class ParticleManager implements Runnable {
     public static void spawnEmitter(Instance instance, Vec position, ParticleData particleData, int amount, EmitterMode mode, EmmiterShape shape) {
         Emitter emitter = new Emitter(
                 instance,
-                position.asPosition(),
+                position.asPos(),
                 particleData, amount,
                 mode,
                 shape
