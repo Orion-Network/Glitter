@@ -19,6 +19,7 @@ import net.minestom.server.network.packet.server.play.DestroyEntitiesPacket;
 
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.function.Predicate;
 
 @Getter
 public final class Emitter implements Tickable, VariablesHolder {
@@ -33,6 +34,12 @@ public final class Emitter implements Tickable, VariablesHolder {
     private boolean rotateAroundPosition = false;
     @Setter
     private Entity attachedEntity;
+    /**
+     * Parmi ceux qui voient le chunk, ceux qui voient les particules ; null pour tous. Une cinematique les reserve a
+     * ses spectateurs.
+     */
+    @Setter
+    private Predicate<Player> audience;
     private final EmitterData emitterData;
     private final long lifeTime;
     private volatile boolean killed;
@@ -83,8 +90,9 @@ public final class Emitter implements Tickable, VariablesHolder {
     }
 
     /**
-     * Suit les joueurs qui voient le chunk de l'emetteur. Un joueur arrive apres l'apparition des particules (une
-     * orbite qui dure tout un combat, par exemple) les recoit telles qu'elles sont a ce moment.
+     * Suit les joueurs qui voient le chunk de l'emetteur, et que l'{@link #audience} accepte. Un joueur arrive apres
+     * l'apparition des particules (une orbite qui dure tout un combat, par exemple) les recoit telles qu'elles sont a
+     * ce moment.
      */
     private void refreshViewers() {
         Instance current = getInstance();
@@ -92,7 +100,9 @@ public final class Emitter implements Tickable, VariablesHolder {
         if (chunk == null) {
             return;
         }
-        Set<? extends Player> now = chunk.getViewers();
+        Predicate<Player> audience = this.audience;
+        Set<Player> now = new HashSet<>(chunk.getViewers());
+        if (audience != null) now.removeIf(audience.negate());
         viewers.retainAll(now);
         for (Player player : now) {
             if (viewers.add(player)) {
